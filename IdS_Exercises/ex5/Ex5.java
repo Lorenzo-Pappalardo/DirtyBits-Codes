@@ -24,9 +24,7 @@ public class Ex5 {
 
     private static void printPathRecursively(File f, int indentation) {
         if (f.isDirectory()) {
-            for (int i = 0; i < indentation; i++) {
-                System.out.print("    ");
-            }
+            indent(indentation);
             if (f.listFiles().length == 0)
                 System.out.println(f.getName() + " is an empty directory");
             else {
@@ -35,9 +33,7 @@ public class Ex5 {
                     printPathRecursively(tmp, indentation + 1);
             }
         } else {
-            for (int i = 0; i < indentation; i++) {
-                System.out.print("    ");
-            }
+            indent(indentation);
             System.out.println(f.getName() + " is a file, showing content below...");
 
             printFile(f, indentation + 1);
@@ -48,25 +44,25 @@ public class Ex5 {
         try {
             LineNumberReader reader = new LineNumberReader(new FileReader(f));
 
-            for (int i = 0; i < indentation; i++) {
-                System.out.print("    ");
-            }
+            indent(indentation);
             System.out.println("********** FILE START **********");
 
             String lineRead;
             while ((lineRead = reader.readLine()) != null) {
-                for (int i = 0; i < indentation; i++) {
-                    System.out.print("    ");
-                }
+                indent(indentation);
                 System.out.println(lineRead);
             }
 
-            for (int i = 0; i < indentation; i++) {
-                System.out.print("    ");
-            }
+            indent(indentation);
             System.out.println("********** FILE END **********");
         } catch (Exception e) {
             System.err.println(e);
+        }
+    }
+
+    private static void indent(int indentation) {
+        for (int i = 0; i < 4 * indentation; i++) {
+            System.out.print(' ');
         }
     }
 }
