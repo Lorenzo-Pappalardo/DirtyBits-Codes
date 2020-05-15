@@ -55,6 +55,8 @@ public class Ex5 {
 
             indent(indentation);
             System.out.println("********** FILE END **********");
+
+            reader.close();
         } catch (Exception e) {
             System.err.println(e);
         }
