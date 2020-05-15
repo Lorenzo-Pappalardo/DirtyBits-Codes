@@ -14,6 +14,7 @@
      $ homework-2 <pathname sorgente> <pathname destinazione>
 */
 
+#include </usr/include/fcntl.h>
 #include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +22,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include </usr/include/fcntl.h>
 
 static const int BUFFERSIZE = 1024;
 
@@ -46,11 +46,11 @@ int main(int argc, char *argv[]) {
   }
 
   if (!S_ISDIR(dest_info.st_mode)) {
-      fprintf(stderr, "%s is not a directory!", argv[2]);
-      exit(4);
+    fprintf(stderr, "%s is not a directory!", argv[2]);
+    exit(4);
   }
 
-  //constructing pathname
+  // constructing pathname
   strcpy(dest, argv[2]);
   int length = strlen(dest);
   strcpy(dest + length, filename);
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
       }
       printf("%s moved\n", filename);
     } else {
-      printf("Cross-filesystem operation! Using");
+      printf("Cross-filesystem operation! \"Copy and delete\" mode...\n");
 
       int source_fd, dest_fd;
       char buffer[BUFFERSIZE];
@@ -79,9 +79,10 @@ int main(int argc, char *argv[]) {
         exit(5);
       }
 
-      if ((dest_fd = open(dest, O_RDWR | O_TRUNC | O_CREAT, file_info.st_mode & 0777)) == -1) {
-          perror(dest);
-          exit(5);
+      if ((dest_fd = open(dest, O_RDWR | O_TRUNC | O_CREAT,
+                          file_info.st_mode & 0777)) == -1) {
+        perror(dest);
+        exit(5);
       }
 
       do {
@@ -94,7 +95,7 @@ int main(int argc, char *argv[]) {
           perror(dest);
           exit(7);
         }
-      } while(bytes_read == BUFFERSIZE);
+      } while (bytes_read == BUFFERSIZE);
 
       if (unlink(argv[1])) {
         perror(argv[1]);
