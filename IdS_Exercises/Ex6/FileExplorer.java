@@ -9,8 +9,8 @@ public class FileExplorer {
     }
 
     private void indent(int indent_depth) {
-        for (int i = 0; i < 4 * indent_depth; i++) {
-            System.out.print(' ');
+        for (int i = 0; i < indent_depth; i++) {
+            System.out.print('\t');
         }
     }
 

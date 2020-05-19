@@ -63,8 +63,8 @@ public class Ex5 {
     }
 
     private static void indent(int indentation) {
-        for (int i = 0; i < 4 * indentation; i++) {
-            System.out.print(' ');
+        for (int i = 0; i < indentation; i++) {
+            System.out.print('\t');
         }
     }
 }
