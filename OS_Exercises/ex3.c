@@ -58,9 +58,10 @@ int main(int argc, char *argv[]) {
     exit(3);
   }
 
+  const int size = file_info.st_size;
   void *mapped_file;
-  if ((mapped_file = mmap(NULL, file_info.st_size, PROT_READ | PROT_WRITE,
-                          MAP_SHARED, file_descriptor, 0)) == (void *)-1) {
+  if ((mapped_file = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED,
+                          file_descriptor, 0)) == (void *)-1) {
     perror("mmap()");
     exit(4);
   }
@@ -69,4 +70,6 @@ int main(int argc, char *argv[]) {
     perror("close()");
     exit(5);
   }
+
+  const int lines_num = size / N;
 }
