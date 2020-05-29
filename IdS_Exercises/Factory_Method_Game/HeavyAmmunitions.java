@@ -1,3 +1,5 @@
+package Factory_Method_Game;
+
 public class HeavyAmmunitions implements Ammunitions {
     @Override
     public String getName() {

@@ -1,3 +1,5 @@
+package Factory_Method_Game;
+
 public class Shotgun implements Weapon {
     Ammunitions ammo;
 

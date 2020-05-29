@@ -1,3 +1,5 @@
+package Factory_Method_Game;
+
 import java.util.Random;
 
 public class Armory {

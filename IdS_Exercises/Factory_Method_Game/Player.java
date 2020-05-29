@@ -1,3 +1,5 @@
+package Factory_Method_Game;
+
 public class Player {
     private static Player instance;
     String name;

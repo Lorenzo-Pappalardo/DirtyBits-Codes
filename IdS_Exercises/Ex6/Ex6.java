@@ -6,6 +6,8 @@
     Fare in modo che l'unica responsabilità del main sia di creare un FileExplorer e di farne uso.
 */
 
+package Ex6;
+
 public class Ex6 {
     public static void main(String args[]) {
         if (args.length == 0) {
