@@ -1,10 +1,10 @@
-package Units_Conversion_Adapter;
+package Adapter_Units_Conversion;
 
-/** Interface to which the Client can get a reference */
+/** Target */
 public interface ICar {
     /**
-     * get speed in kmh
-     * @return double : speed in kmh
+     * Get speed in kmh
+     * @return Double : Speed in kmh
      */
-    public double getSpeed();
+    public Double getSpeed();
 }

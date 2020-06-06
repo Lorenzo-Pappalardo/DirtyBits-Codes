@@ -1,12 +1,12 @@
-package Units_Conversion_Adapter;
+package Adapter_Units_Conversion;
 
-/** Class for which I want to provide an Adapter */
+/** Adaptee */
 public class CarAdaptee {
     /**
-     * get speed in mph
-     * @return double : speed in mph
+     * Get speed in mph
+     * @return Double : Speed in mph
      */
-    public double getSpeed() {
-        return 300;
+    public Double getSpeed() {
+        return 300d;
     }
 }

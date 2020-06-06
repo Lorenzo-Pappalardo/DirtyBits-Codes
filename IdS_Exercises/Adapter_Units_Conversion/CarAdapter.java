@@ -1,17 +1,22 @@
-package Units_Conversion_Adapter;
+package Adapter_Units_Conversion;
 
-/** Adapter class which adapts the Adaptee class */
+/** Adapter */
 public class CarAdapter implements ICar {
     private CarAdaptee car;
 
     @Override
-    public double getSpeed() {
+    public Double getSpeed() {
         if (this.car == null)
-            this.car = new CarAdaptee();
+            this.car = new CarAdaptee();        //Lazy Initialization
         return convert(car.getSpeed());
     }
 
-    private double convert(double speed) {
+    /**
+     * Converts from mph to kmh
+     * @param speed The speed in mph
+     * @return Double : Speed in kmh
+     */
+    private Double convert(double speed) {
         return speed * 1.60934;
     }
 }
