@@ -1,9 +1,6 @@
-# Compiled class file
+# Java compiled files
 *.class
 
-# C compiled programs
+# C compiled files
 *.exe
 *.out
-
-# Program that deletes every compiled file
-Remove Compiled Files.ps1

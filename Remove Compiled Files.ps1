@@ -1,0 +1,1 @@
+﻿Get-ChildItem *.class, *.out -Recurse | Remove-Item
