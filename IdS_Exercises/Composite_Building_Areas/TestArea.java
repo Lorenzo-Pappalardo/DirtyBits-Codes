@@ -1,4 +1,4 @@
-package Composite;
+package Composite_Building_Areas;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package Composite;
+package Composite_Building_Areas;
 
 class AreaFinanziaria implements Area {
     private int ID;

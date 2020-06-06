@@ -1,4 +1,4 @@
-package Decorator;
+package Decorator_Hamburger;
 
 public interface IComponent {
     public String getProductName();

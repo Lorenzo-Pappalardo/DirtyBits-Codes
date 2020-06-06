@@ -1,4 +1,4 @@
-package Factory_Method_Game;
+package Factory_Method_Player_Armory;
 
 import java.util.Scanner;
 

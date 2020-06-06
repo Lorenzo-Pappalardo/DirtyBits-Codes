@@ -1,4 +1,4 @@
-package Composite;
+package Composite_Building_Areas;
 
 public interface Area {
     public void printName();

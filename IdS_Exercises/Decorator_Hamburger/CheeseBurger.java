@@ -1,4 +1,4 @@
-package Decorator;
+package Decorator_Hamburger;
 
 public class CheeseBurger implements IComponent {
     public String getProductName() {

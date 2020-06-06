@@ -1,4 +1,4 @@
-package Composite;
+package Composite_Building_Areas;
 
 public class AreaCommerciale implements Area {
     private int ID;

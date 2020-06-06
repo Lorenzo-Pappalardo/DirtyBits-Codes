@@ -1,4 +1,4 @@
-package Decorator;
+package Decorator_Hamburger;
 
 public class ExtraCetriolo extends Decorator {
     public ExtraCetriolo(IComponent component)     {

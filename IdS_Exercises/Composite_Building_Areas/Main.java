@@ -1,4 +1,4 @@
-package Composite;
+package Composite_Building_Areas;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package PC_Booting_App_Facade;
+package Facade_PC_Booting_App;
 
 public class Facade {
     private final int BOOT_ADDRESS = 0x1024

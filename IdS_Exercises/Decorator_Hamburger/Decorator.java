@@ -1,4 +1,4 @@
-package Decorator;
+package Decorator_Hamburger;
 
 public abstract class Decorator implements IComponent {
     protected IComponent component;
