@@ -18,7 +18,7 @@ public class Shotgun implements Weapon {
     }
 
     @Override
-    public float getSingleTargetDamage() {
+    public float getSingleHitDamage() {
         return 33.3f * ammo.getMultiplier();
     }
 }

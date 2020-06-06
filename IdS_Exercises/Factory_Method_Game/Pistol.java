@@ -1,5 +1,6 @@
 package Factory_Method_Game;
 
+/** Concrete Product */
 public class Pistol implements Weapon {
     Ammunitions ammo;
 
@@ -18,7 +19,7 @@ public class Pistol implements Weapon {
     }
 
     @Override
-    public float getSingleTargetDamage() {
+    public float getSingleHitDamage() {
         return 50 * ammo.getMultiplier();
     }
 }
