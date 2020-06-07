@@ -1,7 +1,7 @@
 package Facade_PC_Booting_App;
 
 public class Facade {
-    private final int BOOT_ADDRESS = 0x1024
+    private final int BOOT_ADDRESS = 0x1024;
     private final int BOOT_SECTOR = 1;
     private final int SECTOR_SIZE = 512;
 
@@ -18,13 +18,12 @@ public class Facade {
     /** Starting the PC */
     public void start() {
         /** Accessing HDD and reading bytes */
-        byte[] bytes_read = hdd.read(BOOT_SECTOR, SECTOR_SIZE);
+        byte[] bytesRead = hdd.read(BOOT_SECTOR, SECTOR_SIZE);
 
         /** Loading bytes read in memory */
-        memory.load(BOOT_ADDRESS, bytes_read);
+        memory.load(BOOT_ADDRESS, bytesRead);
 
-        /** First commands executed */
-        cpu.freeze();
-        cpu.jump(BOOT_ADDRESS);
+        /** First command executed */
+        cpu.exec(cpu.loadInRegister(BOOT_ADDRESS));
     }
 }
