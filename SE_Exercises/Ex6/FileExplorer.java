@@ -1,3 +1,5 @@
+package Ex6;
+
 import java.io.File;
 import java.util.List;
 import java.nio.file.FileSystems;
