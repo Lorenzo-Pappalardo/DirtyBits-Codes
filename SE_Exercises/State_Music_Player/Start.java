@@ -2,7 +2,7 @@ package State_Music_Player;
 
 public class Start implements State {
     @Override
-    public void switchState() {
+    public void printState() {
         System.out.println("Music player started!");
     }
 

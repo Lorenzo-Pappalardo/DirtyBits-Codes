@@ -1,5 +1,6 @@
 package State_Music_Player;
 
+/** Context */
 public class Context {
     private State state;
 
@@ -10,12 +11,17 @@ public class Context {
     public void setState(String action) {
         if (action.equalsIgnoreCase("start")) {
             this.state = new Start();
-        } else if(action.equalsIgnoreCase("stop")) {
+        } else if (action.equalsIgnoreCase("stop")) {
             this.state = new Stop();
-        } else {}
+        } else {
+        }
     }
 
     public State getState() {
         return state;
+    }
+
+    public void printState() {
+        state.printState();
     }
 }
