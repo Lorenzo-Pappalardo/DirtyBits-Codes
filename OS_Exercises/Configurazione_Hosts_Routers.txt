@@ -1,0 +1,18 @@
+Configurazione di un host:
+nano /etc/network/interfaces
+	auto enp0sX, dove X dipende dalla scheda di rete
+	static
+	address X.X.X.X/X
+	gateway X.X.X.X
+
+Configurazione di un router:
+nano /etc/network/interfaces
+	auto enp0sX, dove X dipende dalla scheda di rete
+	static
+	address X.X.X.X/X
+
+	Per abilitare il packet forwarding:
+		nano /etc/sysctl.conf
+
+	Per settare le regole di routing:
+		up /bin/ip route add X.X.X.X/X via X.X.X.X
