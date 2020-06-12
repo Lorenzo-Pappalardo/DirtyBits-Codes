@@ -28,7 +28,7 @@ public class FunctionalProgramming {
                 return "Hello " + name + '!';
             }
         }.getMessage(name));
-        // Oppure
+        // Anonymous class replaced with lambda function
         System.out.println(new ActualMessage(name).getActualMessage(message -> "Hello " + message + '!'));
     }
 }
