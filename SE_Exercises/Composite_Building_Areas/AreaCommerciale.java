@@ -1,17 +1,19 @@
 package Composite_Building_Areas;
 
+/** Leaf */
 public class AreaCommerciale implements Area {
-    private int ID;
     private String name;
 
-    public AreaCommerciale(int ID, String name) {
-        this.ID = ID;
+    public AreaCommerciale(String name) {
         this.name = name;
     }
 
     @Override
-    public void printName() {
-        System.out.println(getClass().getSimpleName());
+    public void printName(int indentSize) {
+        for (int i = 0; i < indentSize; i++)
+            System.out.print('\t');
+        // System.out.println(getClass().getSimpleName());
+        System.out.println(name);
     }
 
     @Override
@@ -21,9 +23,5 @@ public class AreaCommerciale implements Area {
     @Override
     public void remove(Area a) {
 
-    }
-
-    public int getID() {
-        return ID;
     }
 }
