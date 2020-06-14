@@ -1,0 +1,15 @@
+Design Patterns
+Creazionali:
+	Singleton
+	Factory Method
+Strutturali:
+	Adapter
+	Facade
+	Composite
+	Decorator
+	Bridge
+Comportamentali:
+	State
+	Observer
+	Mediator
+	Chain of Responsability
