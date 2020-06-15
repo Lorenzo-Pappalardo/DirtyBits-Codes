@@ -1,3 +1,5 @@
+package Functional_Programming_Exercises;
+
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -20,10 +22,10 @@ public class Ex1 {
         String substringToLookFor = in.nextLine();
         in.close();
 
-        System.out.println(contains(list, substringToLookFor, substringToLookFor.length()));
+        System.out.println(contains(list, substringToLookFor));
     }
 
-    public static List<String> contains(List<String> original, String substring, int dim) {
-        return original.stream().filter(w -> w.substring(0, dim).equals(substring)).collect(Collectors.toList());
+    public static List<String> contains(List<String> original, String substring) {
+        return original.stream().filter(w -> w.startsWith(substring)).collect(Collectors.toList());
     }
 }
