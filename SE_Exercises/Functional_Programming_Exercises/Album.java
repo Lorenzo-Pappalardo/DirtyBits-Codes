@@ -13,6 +13,7 @@
 package Functional_Programming_Exercises;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class Album implements Comparable<Album> {
    public static void main(String[] args) {
@@ -34,6 +35,7 @@ public class Album implements Comparable<Album> {
                   "Holiday", "Think of Me", "Physical Attraction", "Everybody", "Burning Up", "Lucky Star - New Mix"));
 
       Step1(albums);
+      Step3(albums);
    }
 
    private static void Step1(List<Album> albums) {
@@ -42,6 +44,13 @@ public class Album implements Comparable<Album> {
       Integer count = albums.stream().sorted(Comparator.comparing(Album::getTitle)).map(album -> album.getNumberSongs())
             .reduce(0, (a, b) -> a + b);
       System.out.println("Total songs: " + count);
+   }
+
+   private static void Step3(List<Album> albums) {
+      Predicate<Album> onlyMadeIn2001 = album -> (album.getTitle() == "The First Album") && (album.getYear() == 2001);
+      Integer count = albums.stream().filter(onlyMadeIn2001).map(album -> album.getNumberSongs()).reduce(0,
+            (a, b) -> a + b);
+      System.out.println("The First Album, made in 2001, contains: " + count + " songs");
    }
 
    /** final implica che le variabile a runtime non possono essere modificate **/
