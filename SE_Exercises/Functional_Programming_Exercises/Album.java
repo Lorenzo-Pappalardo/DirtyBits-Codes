@@ -36,6 +36,7 @@ public class Album implements Comparable<Album> {
 
       step1(albums);
       step3(albums);
+      step4(albums);
    }
 
    private static void step1(List<Album> albums) {
@@ -51,6 +52,12 @@ public class Album implements Comparable<Album> {
       Integer count = albums.stream().filter(onlyMadeIn2001).map(album -> album.getNumberSongs()).reduce(0,
             (a, b) -> a + b);
       System.out.println("The First Album, made in 2001, contains: " + count + " songs");
+   }
+
+   private static void step4(List<Album> albums) {
+      Predicate<Album> before1990 = album -> album.getYear() < 1990;
+      Double totalPrice = albums.stream().filter(before1990).mapToDouble(album -> album.getPrice()).sum();
+      System.out.println("Total price: " + totalPrice);
    }
 
    /** final implica che le variabile a runtime non possono essere modificate **/
