@@ -1,3 +1,15 @@
+/**
+ * Data una collezione di Album. Ogni album ha: un titolo, l’autore, l’anno di pubblicazione, il prezzo e la lista di canzoni. Eseguiamo le seguenti operazioni:
+ * STEP 1 : Ordinare gli album in ordine alfabetico e contare quante canzoni sono presenti in ogni album.
+ * STEP 2 : Trovare il numero totale delle canzoni eliminando i doppioni.
+ * STEP 3: Trovare il numero totale di canzoni nell'album "The First Album" dell'anno 2001.
+ * STEP 4: Supponiamo che un cliente acquisti tutti gli album pubblicati prima dell’anno 1990. Quanto spenderebbe?
+ * STEP 5: Visualizzare i primi 3 titoli di canzoni diverse che iniziano con la lettera F e fanno parte di album di anni precedenti al 2000.
+ * Scrivere il codice in stile imperativo e funzionale.
+ * @author Gabriella Verga
+ *
+ */
+
 package Functional_Programming_Exercises;
 
 import java.util.*;
@@ -20,6 +32,16 @@ public class Album implements Comparable<Album> {
       albums.add(
             new Album("Madonna", "The First Album", 2001, 82, "Lucky Star", "Borderline", "Burning Up", "I Know It",
                   "Holiday", "Think of Me", "Physical Attraction", "Everybody", "Burning Up", "Lucky Star - New Mix"));
+
+      Step1(albums);
+   }
+
+   private static void Step1(List<Album> albums) {
+      albums.stream().sorted(Comparator.comparing(Album::getTitle))
+            .map(album -> album.title + ": " + album.getNumberSongs()).forEach(songs -> System.out.println(songs));
+      Integer count = albums.stream().sorted(Comparator.comparing(Album::getTitle)).map(album -> album.getNumberSongs())
+            .reduce(0, (a, b) -> a + b);
+      System.out.println("Total songs: " + count);
    }
 
    /** final implica che le variabile a runtime non possono essere modificate **/
@@ -34,7 +56,7 @@ public class Album implements Comparable<Album> {
       this.year = year;
       this.title = title;
       this.price = price;
-      this.songs = Arrays.asList(songs); /** converto una array in List **/
+      this.songs = Arrays.asList(songs);/** converto una array in List **/
    }
 
    public String getAuthor() {
