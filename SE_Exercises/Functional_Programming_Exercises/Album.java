@@ -34,11 +34,11 @@ public class Album implements Comparable<Album> {
             new Album("Madonna", "The First Album", 2001, 82, "Lucky Star", "Borderline", "Burning Up", "I Know It",
                   "Holiday", "Think of Me", "Physical Attraction", "Everybody", "Burning Up", "Lucky Star - New Mix"));
 
-      Step1(albums);
-      Step3(albums);
+      step1(albums);
+      step3(albums);
    }
 
-   private static void Step1(List<Album> albums) {
+   private static void step1(List<Album> albums) {
       albums.stream().sorted(Comparator.comparing(Album::getTitle))
             .map(album -> album.title + ": " + album.getNumberSongs()).forEach(songs -> System.out.println(songs));
       Integer count = albums.stream().sorted(Comparator.comparing(Album::getTitle)).map(album -> album.getNumberSongs())
@@ -46,7 +46,7 @@ public class Album implements Comparable<Album> {
       System.out.println("Total songs: " + count);
    }
 
-   private static void Step3(List<Album> albums) {
+   private static void step3(List<Album> albums) {
       Predicate<Album> onlyMadeIn2001 = album -> (album.getTitle() == "The First Album") && (album.getYear() == 2001);
       Integer count = albums.stream().filter(onlyMadeIn2001).map(album -> album.getNumberSongs()).reduce(0,
             (a, b) -> a + b);
