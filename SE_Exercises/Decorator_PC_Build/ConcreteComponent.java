@@ -2,11 +2,11 @@ package Decorator_PC_Build;
 
 import java.util.Random;
 
-public class Leaf implements Component {
+public class ConcreteComponent implements Component {
     private final String name;
     private final Integer price;
 
-    Leaf(String name) {
+    ConcreteComponent(String name) {
         this.name = name;
         Random random = new Random(System.currentTimeMillis());
         price = random.nextInt(500);
