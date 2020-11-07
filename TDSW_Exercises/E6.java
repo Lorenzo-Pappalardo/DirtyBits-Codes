@@ -1,10 +1,3 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-
 /*
   Scrivere in C o Java un programma che:
   - Apra una connessione verso l'IP 90.147.166.230 con porta 8080
@@ -14,6 +7,13 @@ import java.net.Socket;
   - Riaperta la connessione, invii la stringa s, seguita da "\n"
   - Scriva i byte ricevuti in risposta sulla standard output
 */
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 
 public class E6 {
   public static void main(String[] args) {
