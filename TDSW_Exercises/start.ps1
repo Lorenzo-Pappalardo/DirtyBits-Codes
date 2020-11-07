@@ -9,5 +9,5 @@ Remove-Item .\build\$filename.class
 javac "$filename.java" -d .\build
 
 Set-Location .\build
-java $args[0]
+java $filename
 Set-Location ..
