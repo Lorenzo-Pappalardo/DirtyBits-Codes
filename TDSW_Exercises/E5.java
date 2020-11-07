@@ -34,6 +34,7 @@ public class E5 {
         while (i < res.length()) {
           if (res.charAt(i) == ']') {
             save = !save;
+            break;
           }
           if (save) {
             command2 += res.charAt(i);

@@ -34,6 +34,8 @@ public class E4 {
         if (linesRead >= 5503 && linesRead <= 5537) {
           finalText.add(res);
         }
+        if (linesRead > 5537)
+          break;
       }
 
       for (String line : finalText) {
