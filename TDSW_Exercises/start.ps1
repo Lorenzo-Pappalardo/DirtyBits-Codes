@@ -29,3 +29,4 @@ else {
   java "$folder.$basename"
 }
 Set-Location ..
+Remove-Item -Recurse .\build\
