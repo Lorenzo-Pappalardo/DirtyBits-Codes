@@ -1,3 +1,13 @@
+/*
+  Scrivere in C o Java un programma cliente che:
+  - Apra una connessione verso l'IP 90.147.166.230 con porta 8080
+  - Invii a tale server la stringa "GET /pappalardo/prova/09.aux\r\n"
+  - Nello stream testo ricevuto, legga il numero che rappresenta il (solo) contenuto della riga 12
+  - Moltiplichi tale numero per il valore restituito dalla funzione remota hash(), eseguita su localhost e applicata al proprio cognome; sia n il risultato,
+  - Invii a 90.147.166.230 con porta 8080 la stringa "GET /pappalardo/prova/09b.aux\r\n",
+  - Dallo stream testo ricevuto, individui la riga n e ne scriva il contenuto sulla standard output.
+*/
+
 package E9;
 
 import java.io.BufferedReader;

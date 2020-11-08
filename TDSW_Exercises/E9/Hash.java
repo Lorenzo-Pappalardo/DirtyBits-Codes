@@ -1,5 +1,3 @@
-package E9;
-
 /*
   Implementare in C/RPC o Java/RMI, su localhost,
   un servizio costituito da una funzione/metodo hash() che:
@@ -8,6 +6,8 @@ package E9;
 
   Scrivere un semplice cliente che invochi la funzione remota passandole come argomento il proprio cognome. 
 */
+
+package E9;
 
 interface Hash {
   public static int getHash(String surname) {
