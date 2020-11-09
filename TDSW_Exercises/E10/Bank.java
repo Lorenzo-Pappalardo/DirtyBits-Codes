@@ -1,3 +1,20 @@
+/*
+Implementare in C o Java, su localhost, un programma server banca, connection-oriented, che:
+  - Mantenga un array di 10 interi conto che rappresentano il saldo dei conti da 0 a 9;
+  - Risponda, su localhost, port 7777 ai seguenti messaggi:
+    [Un] dove n, da 0 a 9, è il numero del conto;
+      l'effetto sarà di rendere il conto n quello attuale, cioè su cui operano implicitamente gli altri comandi;
+    [Vxyzw] dove xyzw sono 4 cifre intere;
+      l'effetto sarà di versare la somma xyzw sul conto attuale (cioè l'ultimo selezionato con il comando [Un])
+    [Pxyzw] dove xyzw sono 4 cifre intere;
+      l'effetto sarà di prelevare la somma xyzw dal conto attuale (cioè l'ultimo selezionato con il comando [Un])
+    [S]
+      l'effetto sarà di inviare al cliente il saldo depositato sul conto attuale (cioè l'ultimo selezionato con il comando [Un])
+  - Risponda ERROR a ogni altro dato ricevuto dal cliente
+
+  P.S. io ho cambiato lettere in conformità alle parole inglesi corrispondenti alle azioni intraprese
+*/
+
 package E10;
 
 import java.io.BufferedReader;
