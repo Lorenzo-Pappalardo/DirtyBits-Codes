@@ -1,3 +1,5 @@
+// Simple client to interact with Bank server
+
 package E10;
 
 import java.io.BufferedReader;
