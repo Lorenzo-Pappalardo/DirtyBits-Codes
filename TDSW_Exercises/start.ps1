@@ -13,20 +13,25 @@ if ($path[0] -eq '.') {
   $basename = $tmp[$i-1].Split("{.}")[0]
 }
 
-Remove-Item .\build\$basename.class
-
 if ($folder -eq "" -or $folder -eq ".") {
   javac "$basename.java" -d .\build
 } else {
   javac $path -d .\build
 }
 
+$arguments  = "";
+for($i=1; $i -lt $args.Count; $i++) {
+    $arguments += $args[$i]
+    if ($i -ne $args.Count-1) {
+      $arguments += " "
+    }
+}
+
 Set-Location .\build
 if ($folder -eq "" -or $folder -eq ".") {
-  java $basename
+  java $basename $arguments
 }
 else {
-  java "$folder.$basename"
+  java "$folder.$basename" $arguments
 }
 Set-Location ..
-Remove-Item -Recurse .\build\
