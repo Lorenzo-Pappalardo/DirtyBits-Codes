@@ -110,7 +110,7 @@ public class Bank {
               break;
             }
             sendBuffer.println("Money: " + accounts[selectedAccount]);
-            System.out.println("Sent money availability to us");
+            System.out.println("Sent account balance");
             break;
           default:
             handleError(sendBuffer);
