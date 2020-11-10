@@ -17,8 +17,8 @@ interface Validate {
   }
 
   public static void test() {
-    String correctRow = "0123456789";
-    String wrongRow = "180200";
+    String correctRow = "123456789";
+    String wrongRow = "213612345";
     if (validate(correctRow) && !(validate(wrongRow)))
       System.out.println("It works! xD");
     else
