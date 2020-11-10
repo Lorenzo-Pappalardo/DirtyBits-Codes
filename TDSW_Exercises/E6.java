@@ -1,7 +1,7 @@
 /*
   Scrivere in C o Java un programma che:
   - Apra una connessione verso l'IP 90.147.166.230 con porta 8080
-  - Invii la stringa "GET /pappalardo/prova/06.aux\r\n"
+  - Invii la stringa "GET /prova/06.aux\r\n"
   - Nello stream di byte ricevuti individui il primo carattere diverso da 'x', spazio o fine riga
   - Memorizzi questo byte e tutti quelli che il server invierà ancora in una variabile stringa denominata "s"
   - Riaperta la connessione, invii la stringa s, seguita da "\n"
@@ -19,7 +19,7 @@ public class E6 {
   public static void main(String[] args) {
     final String address = "90.147.166.230";
     final int port = 8080;
-    final String command = "GET /pappalardo/prova/06.aux\r\n";
+    final String command = "GET /prova/06.aux\r\n";
     String nextCommand = "";
 
     try (Socket socket = new Socket(InetAddress.getByName(address), port);

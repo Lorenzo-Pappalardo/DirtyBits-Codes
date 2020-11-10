@@ -1,7 +1,7 @@
 /*
   Scrivere in C o Java un programma che:
   - Apra una connessione verso l'IP 90.147.166.230 con porta 8080
-  - Invii la stringa "GET /pappalardo/prova/04.aux\n"
+  - Invii la stringa "GET /prova/04.aux\n"
   - Dallo stream di byte ricevuti memorizzi quelli relativi alle righe in posizione 5503-5537
   - Scriva questi byte sulla standard output
 */
@@ -18,7 +18,7 @@ public class E4 {
   public static void main(String[] args) {
     final String address = "90.147.166.230";
     final int port = 8080;
-    final String command = "GET /pappalardo/prova/04.aux\r\n";
+    final String command = "GET /prova/04.aux\r\n";
 
     try (Socket socket = new Socket(InetAddress.getByName(address), port);
         BufferedReader socketInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
