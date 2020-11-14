@@ -1,4 +1,4 @@
-package Esame_24_05_2016;
+package CubeOfNumber;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
