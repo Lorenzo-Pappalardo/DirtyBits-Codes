@@ -9,7 +9,7 @@ package threads_giving_numbers.v1;
 */
 
 public class Main {
-  private static Sample sample = new Sample();
+  private static Sample sample = Sample.getInstance();
 
   public static void main(String[] args) {
     MyThread t1 = new MyThread("T1", sample);
