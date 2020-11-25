@@ -1,4 +1,4 @@
-package threads_giving_numbers;
+package threads_giving_numbers.v1;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ public class MyThread extends Thread {
 
   MyThread(String name, Sample sample) {
     super(name);
-    random = new Random(System.currentTimeMillis());
+    random = new Random();
     this.sample = sample;
   }
 
@@ -17,12 +17,14 @@ public class MyThread extends Thread {
     while (true) {
       int newValue = random.nextInt(20) + 1;
       synchronized (sample) {
-        if (sample.get() == newValue)
+        if (sample.get() == newValue) {
+          System.out.println(getName() + ": reads " + sample.get() + ", but new value is the same");
+          System.out.println(getName() + " terminates");
           break;
+        }
         System.out.println(getName() + ": reads " + sample.get() + ", writes " + newValue);
         sample.set(newValue);
       }
     }
-    System.out.println(getName() + " terminated");
   }
 }

@@ -1,4 +1,4 @@
-package threads_giving_numbers;
+package threads_giving_numbers.v1;
 
 public class Sample {
   private int value = 0;

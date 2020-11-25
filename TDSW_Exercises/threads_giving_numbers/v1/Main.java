@@ -1,4 +1,4 @@
-package threads_giving_numbers;
+package threads_giving_numbers.v1;
 
 /*
   Scrivere un programma in cui tre thread aggiornano la stessa variabile globale condivisa sample, inizialmente posta a 50.
