@@ -1,16 +1,13 @@
 if ($args.length -lt 1) {
-  throw "You must pass the file's name that you want to run"
+  Throw "You must pass the file's name that you want to run"
 }
 
-$arguments = ""
+$arguments = [System.Collections.Generic.List[string]]::new()
 for ($i = 1; $i -lt $args.Count; $i++) {
-  $arguments += $args[$i]
-  if ($i -ne $args.Count - 1) {
-    $arguments += " "
-  }
+  $arguments.Add($args[$i])
 }
 
-Remove-Item -Recurse .\build
+Remove-Item -Recurse .\build -ErrorAction SilentlyContinue
 
 $folder = Split-Path -Path $args[0] -Parent
 $filename = Split-Path -Path $args[0] -Leaf
