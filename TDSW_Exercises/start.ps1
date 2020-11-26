@@ -7,8 +7,6 @@ for ($i = 1; $i -lt $args.Count; $i++) {
   $arguments.Add($args[$i])
 }
 
-Remove-Item -Recurse .\build -ErrorAction SilentlyContinue
-
 $folder = Split-Path -Path $args[0] -Parent
 $filename = Split-Path -Path $args[0] -Leaf
 $filename = $filename.Split('.')[0]
