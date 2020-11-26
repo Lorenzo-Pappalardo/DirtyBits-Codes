@@ -1,7 +1,7 @@
-package CountingThreads;
+package CountingThreads.v2;
 
 public class CountingThreads {
-  private static int x = 0;
+  public static int x = 0;
 
   public static synchronized int getX() {
     return x;
@@ -21,11 +21,11 @@ public class CountingThreads {
     try {
       t1.join();
       t2.join();
-    } catch (InterruptedException e) {
+    } catch (Exception e) {
       e.printStackTrace();
-      Thread.currentThread().interrupt();
     }
 
-    System.out.println("X value: " + x);
+    System.out.println("All threads finished");
+    System.out.println("X: " + x);
   }
 }
