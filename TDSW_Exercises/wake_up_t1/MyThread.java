@@ -3,12 +3,10 @@ package wake_up_t1;
 import java.util.Random;
 
 public class MyThread extends Thread {
-  private X x;
   public static Boolean stopT2 = false;
 
   MyThread(String name) {
     super(name);
-    x = X.getInstance();
   }
 
   @Override
