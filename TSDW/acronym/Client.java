@@ -20,7 +20,7 @@ public class Client {
     try (DatagramSocket socket = new DatagramSocket(); Scanner keyboardInput = new Scanner(System.in);) {
       System.out.print("Insert your name: ");
       String name = keyboardInput.nextLine();
-      name = "TEST\r\n";
+      name += "\r\n";
 
       byte[] buffer = name.getBytes();
       socket.send(new DatagramPacket(buffer, buffer.length, InetAddress.getByName(args[0]), Integer.parseInt(args[1])));
@@ -30,7 +30,10 @@ public class Client {
 
       try (BufferedReader result = new BufferedReader(
           new InputStreamReader((new ByteArrayInputStream(incomingPacket.getData()))));) {
-        System.out.println(result.readLine());
+        String res;
+        while ((res = result.readLine()) != null) {
+          System.out.println(res);
+        }
       } catch (Exception e) {
         e.printStackTrace();
       }

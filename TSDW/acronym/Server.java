@@ -51,7 +51,6 @@ public class Server {
       while (true) {
         int wordIndex = new Random(System.currentTimeMillis()).nextInt(Words.words.length);
         selectedWord = Words.words[wordIndex];
-        System.out.println(selectedWord);
         if (selectedWord.toLowerCase().charAt(0) == name.toLowerCase().charAt(i))
           break;
       }
