@@ -7,7 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Random;
 
-public class Server {
+public class Server_UDP {
   private static final int PORT = 8080;
   private static final int BUFFERSIZE = 8080;
 

@@ -8,7 +8,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Scanner;
 
-public class Client {
+public class Client_UDP {
   private static final int BUFFERSIZE = 8080;
 
   public static void main(String[] args) {
