@@ -18,15 +18,19 @@ else {
   javac "$folder\$filename.java" -d .\build
 }
 
-Set-Location .\build
-if ($folder -eq "" -or $folder -eq ".") {
-  java $filename $arguments
-}
-else {
-  $folder = $folder.Replace('\', '.')
-  if ($folder.Substring(0, 2) -eq "..") {
-    $folder = $folder.Substring(2)
+try {
+  Set-Location .\build
+  if ($folder -eq "" -or $folder -eq ".") {
+    java $filename $arguments
   }
-  java "$folder.$filename" $arguments
+  else {
+    $folder = $folder.Replace('\', '.')
+    if ($folder.Substring(0, 2) -eq "..") {
+      $folder = $folder.Substring(2)
+    }
+    java "$folder.$filename" $arguments
+  }
 }
-Set-Location ..
+finally {
+  Set-Location ..
+}
