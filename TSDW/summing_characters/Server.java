@@ -36,12 +36,15 @@ public class Server {
           BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
           PrintWriter socketOutput = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);) {
         System.out.println("Connection accepted from " + clientSocket);
-        String line;
-        line = socketInput.readLine();
-        if (line.equals("exit"))
-          break;
+        socketOutput.println("Insert a line:");
 
-        System.out.println(line); // A
+        String line = socketInput.readLine();
+        if (line.equals("exit")) {
+          socketOutput.println("Bye xD");
+          break;
+        }
+
+        System.out.println("Received line: " + line); // A
         // socketOutput.println(line); // B
         socketOutput.println("Request n." + ++handledRequests + "°: Sum of all character as digits = " + sumAll(line)); // C
         socketOutput.println("Request n." + ++handledRequests + "°: Sum of only digits = " + sumOnlyNumbers(line)); // D

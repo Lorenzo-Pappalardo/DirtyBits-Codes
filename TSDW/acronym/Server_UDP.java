@@ -42,20 +42,20 @@ public class Server_UDP {
     return name;
   }
 
-  private static String explodeAcronym(String name) {
-    String res = "";
+  public static String explodeAcronym(String name) {
+    Random random = new Random(System.currentTimeMillis());
+
+    String res = "\r\n";
 
     for (int i = 0; i < name.length(); i++) {
-      String selectedWord;
-
       while (true) {
-        int wordIndex = new Random(System.currentTimeMillis()).nextInt(Words.words.length);
-        selectedWord = Words.words[wordIndex];
-        if (selectedWord.toLowerCase().charAt(0) == name.toLowerCase().charAt(i))
+        int wordIndex = random.nextInt(Words.words.length);
+        String selectedWord = Words.words[wordIndex];
+        if (selectedWord.toLowerCase().charAt(0) == name.toLowerCase().charAt(i)) {
+          res += "[" + name.charAt(i) + "]" + selectedWord.substring(1) + "\r\n";
           break;
+        }
       }
-
-      res += "[" + name.charAt(i) + "]" + selectedWord.substring(1) + '\n';
     }
 
     return res;
