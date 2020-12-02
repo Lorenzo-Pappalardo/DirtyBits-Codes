@@ -25,13 +25,13 @@ public class MyThread extends Thread {
       try (Socket socket = new Socket(InetAddress.getByName(address), port);
           BufferedReader receiveBuffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
           PrintWriter sendBuffer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);) {
-        System.out.println(receiveBuffer.readLine());
+        receiveBuffer.readLine(); // This is needed just to procees further
 
         sendBuffer.println(command);
 
         System.out.println(getName() + ") Response: " + receiveBuffer.readLine());
       } catch (Exception e) {
-        e.printStackTrace();
+        System.err.println(getName() + " error");
       }
     }
   }
