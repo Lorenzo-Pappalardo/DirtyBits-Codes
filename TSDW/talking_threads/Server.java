@@ -22,15 +22,11 @@ public class Server {
 
         sendBuffer.println("Usage: <command> <text>");
 
-        String request;
-        while ((request = receiveBuffer.readLine()) != null) {
-          if (request.equals("exit")) {
-            System.out.println("Server closed");
-            System.exit(0);
-          }
+        String request = receiveBuffer.readLine();
 
-          sendBuffer.println(handleRequest(request));
-        }
+        System.out.println("Received request: " + request);
+
+        sendBuffer.println(handleRequest(request));
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -50,12 +46,12 @@ public class Server {
 
     if (request.substring(0, 10).equalsIgnoreCase("capitalize")) {
       String line = request.substring(11);
+      boolean capitalize = false;
 
       String capitalizedLine = "";
-      boolean capitalize = false;
-      for (int i = 0; i < line.length(); i++) {
-        capitalizedLine += line.substring(i, i + 1).toUpperCase();
+      capitalizedLine += line.substring(0, 1).toUpperCase();
 
+      for (int i = 1; i < line.length(); i++) {
         if (line.charAt(i) == ' ') {
           capitalizedLine += line.charAt(i);
           capitalize = true;
