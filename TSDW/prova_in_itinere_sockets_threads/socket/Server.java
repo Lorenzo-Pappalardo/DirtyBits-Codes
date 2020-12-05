@@ -24,12 +24,14 @@ public class Server {
       // sendBuffer.println("Insert word: "); // This is needed to use telnet
 
       while (true) {
-        String request = receiveBuffer.readLine();
-        if (request.equals("exit"))
+        String word = receiveBuffer.readLine();
+        if (word.equals("exit"))
           break;
 
-        if (request.length() > maxLength) {
-          maxLength = request.length();
+        System.out.println("Received: " + word);
+
+        if (word.length() > maxLength) {
+          maxLength = word.length();
         }
       }
 

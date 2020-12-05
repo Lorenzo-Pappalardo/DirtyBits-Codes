@@ -18,7 +18,7 @@ public class Client {
     try (Socket socket = new Socket(InetAddress.getByName(args[0]), Integer.parseInt(args[1]));
         BufferedReader receiveBuffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter sendBuffer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);) {
-
+      System.out.println("Insert words:\t\t\tInsert \"exit\" to stop");
       Scanner scanner = new Scanner(System.in);
 
       while (true) {
