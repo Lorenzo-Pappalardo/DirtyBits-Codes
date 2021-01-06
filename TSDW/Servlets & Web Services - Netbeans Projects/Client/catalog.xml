@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://localhost:8081/Tomcat_Server/Tomcat_WS?wsdl" uri="src/conf/xml-resources/web-service-references/Tomcat_WS/wsdl/localhost_8081/Tomcat_Server/Tomcat_WS.wsdl"/>
+    <system systemId="http://localhost:8081/Tomcat_Server/Tomcat_WS?xsd=1" uri="src/conf/xml-resources/web-service-references/Tomcat_WS/wsdl/localhost_8081/Tomcat_Server/Tomcat_WS.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/Glassfish_Server/Glassfish_WS?wsdl" uri="src/conf/xml-resources/web-service-references/Glassfish_WS/wsdl/localhost_8080/Glassfish_Server/Glassfish_WS.wsdl"/>
+    <system systemId="http://localhost:8080/Glassfish_Server/Glassfish_WS?xsd=1" uri="src/conf/xml-resources/web-service-references/Glassfish_WS/wsdl/localhost_8080/Glassfish_Server/Glassfish_WS.xsd_1.xsd"/>
+    <system systemId="http://localhost:8081/TemperatureWS_Server/TemperatureWS?wsdl" uri="src/conf/xml-resources/web-service-references/TemperatureWS/wsdl/localhost_8081/TemperatureWS_Server/TemperatureWS.wsdl"/>
+    <system systemId="http://localhost:8081/TemperatureWS_Server/TemperatureWS?xsd=1" uri="src/conf/xml-resources/web-service-references/TemperatureWS/wsdl/localhost_8081/TemperatureWS_Server/TemperatureWS.xsd_1.xsd"/>
+</catalog>

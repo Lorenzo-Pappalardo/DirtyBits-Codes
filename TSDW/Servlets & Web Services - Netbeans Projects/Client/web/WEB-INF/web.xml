@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>TomcatServlet</servlet-name>
+        <servlet-class>tomcat.TomcatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GlassfishServlet</servlet-name>
+        <servlet-class>glassfish.GlassfishServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TemperatureServlet</servlet-name>
+        <servlet-class>temperature.TemperatureServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TomcatServlet</servlet-name>
+        <url-pattern>/TomcatServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GlassfishServlet</servlet-name>
+        <url-pattern>/GlassfishServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TemperatureServlet</servlet-name>
+        <url-pattern>/TemperatureServlet</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>

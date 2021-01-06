@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+        *** GENERATED FROM jax-ws.xml - DO NOT EDIT !                             ***
+        *** TO MODIFY wsimport options USE Web Service node -> Edit WS Attributes ***
+        *** TO CHANGE TARGETS GENERATED TO jaxws-build.xml COPY THOSE             ***
+        *** TARGETS TO ../build.xml AND MODIFY THAT FILE INSTEAD                  ***
+
+        --><project xmlns:xalan="http://xml.apache.org/xslt" xmlns:webproject2="http://www.netbeans.org/ns/web-project/2" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
+    <!--
+                ===================
+                JAX-WS WSGEN SECTION
+                ===================
+            -->
+    <!--
+                ===================
+                JAX-WS WSIMPORT SECTION
+                ===================
+            -->
+    <target name="wsimport-init" depends="init">
+        <fail if="${wsimport.bad.version}" message="WsImport ant task defined in the classpath ${j2ee.platform.wsimport.classpath} has a serious bug. See http://wiki.netbeans.org/MetroIssue for details."/>
+        <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
+        <property name="j2ee.platform.wsimport.classpath" value="${libs.jaxws21.classpath}"/>
+        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+            <classpath path="${java.home}/../lib/tools.jar:${j2ee.platform.wsimport.classpath}:${javac.classpath}"/>
+        </taskdef>
+        <condition property="conf-dir" value="${conf.dir}/" else="">
+            <isset property="conf.dir"/>
+        </condition>
+    </target>
+    <target name="wsimport-client-Tomcat_WS" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/Tomcat_WS"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/Tomcat_WS" destdir="${build.generated.dir}/jax-wsCache/Tomcat_WS" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/Tomcat_WS/wsdl/localhost_8081/Tomcat_Server/Tomcat_WS.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8081/Tomcat_Server/Tomcat_WS?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/Tomcat_WS/wsdl/localhost_8081/Tomcat_Server/Tomcat_WS.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/Tomcat_WS"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/Tomcat_WS">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-Tomcat_WS" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/tsdw"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/Tomcat_WS"/>
+    </target>
+    <target name="wsimport-client-Glassfish_WS" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/Glassfish_WS"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/Glassfish_WS" destdir="${build.generated.dir}/jax-wsCache/Glassfish_WS" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/Glassfish_WS/wsdl/localhost_8080/Glassfish_Server/Glassfish_WS.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/Glassfish_Server/Glassfish_WS?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/Glassfish_WS/wsdl/localhost_8080/Glassfish_Server/Glassfish_WS.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/Glassfish_WS"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/Glassfish_WS">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-Glassfish_WS" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/tsdw"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/Glassfish_WS"/>
+    </target>
+    <target name="wsimport-client-TemperatureWS" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/TemperatureWS"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TemperatureWS" destdir="${build.generated.dir}/jax-wsCache/TemperatureWS" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/TemperatureWS/wsdl/localhost_8081/TemperatureWS_Server/TemperatureWS.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8081/TemperatureWS_Server/TemperatureWS?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/TemperatureWS/wsdl/localhost_8081/TemperatureWS_Server/TemperatureWS.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/TemperatureWS"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/TemperatureWS">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-TemperatureWS" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/TemperatureWS"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-Tomcat_WS, wsimport-client-Glassfish_WS, wsimport-client-TemperatureWS"/>
+</project>
