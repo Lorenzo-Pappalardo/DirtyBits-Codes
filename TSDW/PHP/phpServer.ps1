@@ -9,7 +9,7 @@ elseif ($args.Length -gt 1) {
 
 Write-Host 'Server''s root directory will be' $path
 
-$choice = Read-Host -Prompt 'Press ''y'' to publish it, otherwise it will be started locally'
+$choice = Read-Host -Prompt 'Enter ''y'' to publish it, otherwise it will be started locally'
 
 $address = 'localhost:8080'
 if ($choice -eq 'y') {
