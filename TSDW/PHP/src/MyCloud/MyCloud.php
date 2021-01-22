@@ -35,7 +35,7 @@
       echo '<h2 class="center">Photo Gallery</h2>';
       echo '<ul class="gallery-ul">';
       foreach ($files as $image) {
-        echo '<li><img src="./uploads/' . $image . '"></li>';
+        echo '<li><img class="image" src="./uploads/' . $image . '"></li>';
       }
       echo '</ul>';
     }
