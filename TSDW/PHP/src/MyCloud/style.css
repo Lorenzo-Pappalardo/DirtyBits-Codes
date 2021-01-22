@@ -1,0 +1,16 @@
+body {
+  background-color: #03071e;
+}
+
+.title,
+.subtitle {
+  text-align: center;
+  color: #ffba08;
+}
+
+.fileSelector,
+.uploadButton {
+  border: none;
+  background-color: #ffba08;
+  color: #03071e;
+}
