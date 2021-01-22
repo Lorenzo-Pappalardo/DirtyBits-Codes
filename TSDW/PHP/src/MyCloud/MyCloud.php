@@ -9,11 +9,11 @@
 </head>
 
 <body>
-  <h1 class="title">MyCloud</h1>
-  <p class="subtitle">Free - Unlimited - Uncompromising - Consistent - Immutable - 2fast - xD</p>
-  <form action="upload.php">
-    <input type="file" class="fileSelector" name="uploadedFile">
-    <input type="submit" id="uploadButton" value="Upload">
+  <h1 class="center">MyCloud</h1>
+  <p class="center">Free - Unlimited - Uncompromising - Consistent - Immutable - 2fast - xD</p>
+  <form action="upload.php" method="POST" enctype="multipart/form-data">
+    <input type="file" name="uploadedFile">
+    <input type="submit" value="Upload">
   </form>
   <div>
   </div>

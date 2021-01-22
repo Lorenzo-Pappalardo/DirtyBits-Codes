@@ -1,4 +1,5 @@
 $path = Get-Location
+
 if ($args.Length -eq 1) {
   $path = $args[0]
 }
@@ -18,4 +19,4 @@ if ($choice -eq 'y') {
 
 Start-Process 'http://localhost:8080'
 
-php -S $address -t $path -c $path
+php -S $address -t $path

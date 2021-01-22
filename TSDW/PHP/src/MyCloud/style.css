@@ -2,15 +2,29 @@ body {
   background-color: #03071e;
 }
 
-.title,
-.subtitle {
-  text-align: center;
+h1,
+p,
+a {
   color: #ffba08;
 }
 
-.fileSelector,
-.uploadButton {
-  border: none;
+h1.center,
+p.center,
+a.center {
+  text-align: center;
+}
+
+input {
+  border-color: #d00000;
   background-color: #ffba08;
-  color: #03071e;
+  color: #d00000;
+  padding: 3px;
+}
+
+.error {
+  color: red;
+}
+
+.error.center {
+  text-align: center;
 }
