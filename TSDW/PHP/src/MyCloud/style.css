@@ -3,12 +3,14 @@ body {
 }
 
 h1,
+h2,
 p,
 a {
   color: #ffba08;
 }
 
 h1.center,
+h2.center,
 p.center,
 a.center {
   text-align: center;
@@ -27,4 +29,15 @@ input {
 
 .error.center {
   text-align: center;
+}
+
+.gallery {
+  padding: 3%;
+}
+
+.gallery-ul {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 5%;
 }

@@ -15,7 +15,32 @@
     <input type="file" name="uploadedFile">
     <input type="submit" value="Upload">
   </form>
-  <div>
+  <div class="gallery">
+    <?php
+    $dir = opendir('./uploads');
+    $files = [];
+    while (true) {
+      $filename = readdir($dir);
+      if ($filename !== false) {
+        if ($filename !== '.' && $filename !== '..') {
+          $files[$filename] = $filename;
+        }
+      } else {
+        break;
+      }
+    }
+    // print_r($files); // Just for debugging purposes
+
+    if (!(empty($files))) {
+      echo '<h2 class="center">Photo Gallery</h2>';
+      echo '<ul class="gallery-ul">';
+      foreach ($files as $image) {
+        echo '<li><img src="./uploads/' . $image . '"></li>';
+      }
+      echo '</ul>';
+    }
+    ?>
+    </ul>
   </div>
 </body>
 
