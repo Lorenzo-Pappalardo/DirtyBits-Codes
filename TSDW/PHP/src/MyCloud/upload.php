@@ -13,20 +13,23 @@
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo '<h1 class="center">Upload Result</h1>';
     $uploadDir = 'upload/';
-    $tmp_path = $_FILES['uploadedFile']['tmp_name'];
-    $filename = explode('.', basename($tmp_path))[0];
+    if ($tmp_path = $_FILES['uploadedFile']['tmp_name']) {
+      $filename = explode('.', basename($tmp_path))[0];
 
-    $typeNum = exif_imagetype($tmp_path);
-    $typeString = typeToString($typeNum);
-    if ($typeNum) {
-      echo '<p>Uploaded image is of type: ' . $typeString . '</p>';
-      if (!(move_uploaded_file($tmp_path, './uploads/' . $filename . '.' . strtolower($typeString)))) {
-        echo '<h1 class="error center">Upload failed!</h1>';
+      $typeNum = exif_imagetype($tmp_path);
+      $typeString = typeToString($typeNum);
+      if ($typeNum) {
+        echo '<p>Uploaded image is of type: ' . $typeString . '</p>';
+        if (!(move_uploaded_file($tmp_path, './uploads/' . $filename . '.' . strtolower($typeString)))) {
+          echo '<h1 class="error center">Upload failed!</h1>';
+        } else {
+          echo '<h1>Image uploaded successfully!</h1>';
+        }
       } else {
-        echo '<h1>Image uploaded successfully!</h1>';
+        echo '<h1 class="error center">Not a valid image!</h1>';
       }
     } else {
-      echo '<h1 class="error center">Not a valid image!</h1>';
+      echo '<h1 class="error center">Image too big! Max 2 MB</h1>';
     }
   }
 
