@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\GamesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,3 +75,5 @@ Route::get('/variables/{name}_{surname}', function ($name, $surname) {
 Route::get('/urlVariables', function () {
     return view('urlVariables', ['urlVariable' => request('num')]);
 });
+
+Route::get('/games', [GamesController::class, 'index']);
