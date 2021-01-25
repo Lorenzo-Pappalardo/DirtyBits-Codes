@@ -51,7 +51,7 @@ class GamesController extends Controller
      */
     public function show($id)
     {
-        $game = \App\Models\Game::find($id);
+        $game = \App\Models\Game::findOrFail($id);
         return view('games.specificGame', ['game' => $game]);
     }
 
@@ -63,7 +63,8 @@ class GamesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $game = \App\Models\Game::findOrFail($id);
+        return view('games.edit', ['game' => $game]);
     }
 
     /**
@@ -75,7 +76,12 @@ class GamesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $game = \App\Models\Game::findOrFail($id);
+        $game->title = $request->title;
+        $game->release_date = $request->release_date;
+        $game->price = $request->price;
+        $game->save();
+        return redirect('/games');
     }
 
     /**
@@ -86,6 +92,8 @@ class GamesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $game = \App\Models\Game::findOrFail($id);
+        $game->delete();
+        return redirect('/games');
     }
 }

@@ -3,7 +3,7 @@
 @section('title', 'Requested Game')
 
 @section('contents')
-<p>Game's title: {{$game->title}}</p>
-<p>Game's release_date: {{$game->release_date}}</p>
-<p>Game's price: {{$game->price}}</p>
+<h2>Game's title: {{$game->title}}</h2>
+<h2>Game's release_date: {{$game->release_date}}</h2>
+<h2>Game's price: {{$game->price}}</h2>
 @endsection

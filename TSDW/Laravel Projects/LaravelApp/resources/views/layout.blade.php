@@ -9,7 +9,9 @@
 </head>
 
 <body>
+  <em><a href="/games">Home</a></em>
   @yield('contents')
+  <br>
   <em>Coded by Lorenzo</em>
 </body>
 
