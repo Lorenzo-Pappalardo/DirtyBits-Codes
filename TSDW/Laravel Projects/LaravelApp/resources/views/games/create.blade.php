@@ -20,7 +20,7 @@
     @csrf
     <p>Game's title: <input type="text" name="title" required></p>
     <p>Game's release date: <input type="date" name="release_date" required></p>
-    <p>Game's price: <input type="number" name="price" required></p>
+    <p>Game's price: <input type="number" step=0.01 name="price" required></p>
     <input type="submit" value="Submit">
   </form>
 </body>
