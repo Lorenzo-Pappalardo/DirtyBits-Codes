@@ -24,7 +24,7 @@ class GamesController extends Controller
      */
     public function create()
     {
-        //
+        return view('games.create');
     }
 
     /**
@@ -35,7 +35,12 @@ class GamesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newGame = new \App\Models\Game();
+        $newGame->title = request('title');
+        $newGame->release_date = request('release_date');
+        $newGame->price = request('price');
+        $newGame->save();
+        return redirect('/games');
     }
 
     /**
@@ -46,7 +51,8 @@ class GamesController extends Controller
      */
     public function show($id)
     {
-        //
+        $game = \App\Models\Game::all()->get($id);
+        return view('games.specificGame', ['game' => $game]);
     }
 
     /**

@@ -76,4 +76,4 @@ Route::get('/urlVariables', function () {
     return view('urlVariables', ['urlVariable' => request('num')]);
 });
 
-Route::get('/games', [GamesController::class, 'index']);
+Route::resource('games', GamesController::class);
