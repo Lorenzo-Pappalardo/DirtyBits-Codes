@@ -51,7 +51,7 @@ class GamesController extends Controller
      */
     public function show($id)
     {
-        $game = \App\Models\Game::all()->get($id);
+        $game = \App\Models\Game::find($id);
         return view('games.specificGame', ['game' => $game]);
     }
 
