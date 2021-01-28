@@ -14,7 +14,7 @@ class ComputerController extends Controller
      */
     public function index()
     {
-        //
+        return view('computer.index', ['computers' => Computer::all()]);
     }
 
     /**
@@ -24,7 +24,7 @@ class ComputerController extends Controller
      */
     public function create()
     {
-        //
+        return view('computer.create');
     }
 
     /**
@@ -35,7 +35,10 @@ class ComputerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newComputer = new Computer();
+        $newComputer->name = $request->input('name');
+        $newComputer->save();
+        return $this->index();
     }
 
     /**
@@ -46,7 +49,7 @@ class ComputerController extends Controller
      */
     public function show(Computer $computer)
     {
-        //
+        return view('computer.show', ['computer' => $computer]);
     }
 
     /**
@@ -57,7 +60,7 @@ class ComputerController extends Controller
      */
     public function edit(Computer $computer)
     {
-        //
+        return view('computer.edit', ['computer' => $computer]);
     }
 
     /**
@@ -69,7 +72,9 @@ class ComputerController extends Controller
      */
     public function update(Request $request, Computer $computer)
     {
-        //
+        $computer->name = $request->input('name');
+        $computer->save();
+        return $this->index();
     }
 
     /**
@@ -80,6 +85,7 @@ class ComputerController extends Controller
      */
     public function destroy(Computer $computer)
     {
-        //
+        $computer->delete();
+        return $this->index();
     }
 }

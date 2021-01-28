@@ -14,7 +14,7 @@ class ProcessorController extends Controller
      */
     public function index()
     {
-        //
+        return Processor::all();
     }
 
     /**

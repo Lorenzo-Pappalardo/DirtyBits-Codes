@@ -17,7 +17,7 @@ class CreateComputersTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->float('price');
+            $table->float('price')->default(0);
         });
     }
 
