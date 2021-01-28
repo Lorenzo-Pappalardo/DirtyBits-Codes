@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\GameController;
 use App\Http\Controllers\GamesController;
 use Illuminate\Support\Facades\Route;
 
