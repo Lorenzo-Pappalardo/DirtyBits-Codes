@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Motherboard extends Model
+class Component extends Model
 {
     use HasFactory;
 
-    public function processor()
+    public function computer()
     {
-        $this->belongsTo(Processor::class);
+        return $this->belongsTo(Computer::class);
     }
 }

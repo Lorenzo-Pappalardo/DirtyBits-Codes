@@ -9,23 +9,8 @@ class Computer extends Model
 {
     use HasFactory;
 
-    public function processor()
+    public function components()
     {
-        $this->hasOne(Processor::class);
-    }
-
-    public function motherboard()
-    {
-        $this->hasOne(Motherboard::class);
-    }
-
-    public function memories()
-    {
-        $this->hasMany(Memory::class);
-    }
-
-    public function video_cards()
-    {
-        $this->hasMany(VideoCard::class);
+        return $this->hasMany(Component::class);
     }
 }

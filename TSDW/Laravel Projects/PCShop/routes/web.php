@@ -19,3 +19,5 @@ Route::get('/', function () {
 });
 
 Route::resource('computers', ComputerController::class);
+
+Route::post('{id}/components', 'App\Http\Controllers\ComponentController@store');

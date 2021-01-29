@@ -38,7 +38,7 @@ class ComputerController extends Controller
         $newComputer = new Computer();
         $newComputer->name = $request->input('name');
         $newComputer->save();
-        return $this->index();
+        return view('component.create', ['computer_id' => $newComputer->id]);
     }
 
     /**
@@ -70,7 +70,7 @@ class ComputerController extends Controller
      * @param  \App\Models\Computer  $computer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Computer $computer)
+    public function update(Request $request, Computer $computer, $price)
     {
         $computer->name = $request->input('name');
         $computer->save();

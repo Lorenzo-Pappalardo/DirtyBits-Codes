@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VideoCard;
+use App\Models\Component;
+use App\Models\Computer;
 use Illuminate\Http\Request;
 
-class VideoCardController extends Controller
+class ComponentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class VideoCardController extends Controller
      */
     public function index()
     {
-        //
+        return view('component.index', ['components' => Component::all()]);
     }
 
     /**
@@ -22,9 +23,9 @@ class VideoCardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        return view('component.create', ['computer_id' => $id]);
     }
 
     /**
@@ -33,18 +34,26 @@ class VideoCardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        //
+        $newComponent = new Component();
+        $newComponent->name = $request->input('name');
+        $newComponent->price = $request->input('price');
+        $newComponent->computer_id = $id;
+        $newComponent->save();
+        $computer = Computer::find($id);
+        $computer->price += $newComponent->price;
+        $computer->save();
+        return view('computer.index', ['computers' => Computer::all()]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\VideoCard  $videoCard
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(VideoCard $videoCard)
+    public function show($id)
     {
         //
     }
@@ -52,10 +61,10 @@ class VideoCardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\VideoCard  $videoCard
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(VideoCard $videoCard)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +73,10 @@ class VideoCardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\VideoCard  $videoCard
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, VideoCard $videoCard)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +84,10 @@ class VideoCardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\VideoCard  $videoCard
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(VideoCard $videoCard)
+    public function destroy($id)
     {
         //
     }
