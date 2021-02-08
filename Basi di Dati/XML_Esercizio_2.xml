@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<verbali>
+  <verbale>
+    <studente cdl="667" matr="123456">
+      <nome>Filippo</nome>
+      <nome>Maria</nome>
+      <cognome>Rossi</cognome>
+    </studente>
+    <esame>
+      <materia>Data Mining</materia>
+      <docente>Ferro</docente>
+      <voto>30</voto>
+      <lode>Sì</lode>
+      <data>01/04/04</data>
+    </esame>
+  </verbale>
+</verbali>
+
+<!--
+  Fornire:
+    1. una interrogazione XQuery che dal file verbali.xml estragga tutti risultati degli esami di "Reti di Calcolatori" per il CdL "667".
+    2. una possibile DTD, esplicitando opportune ipotesi sulla variabilità dei dati
+-->
+
+<!-- 1 -->
+for $verbale in doc("verbali.xml")//verbale
+where $verbale/esame/materia = "Reti di Calcolatori"
+and $verbale/studente/@cdl=667
+return <risultati>
+          {$verbale/esame/voto}
+          {$verbale/esame/lode}
+        </risultati>
+
+<!-- 2 -->
+<!DOCTYPE verbali[
+<!ELEMENT VERBALI(verbale*)>
+<!ELEMENT verbale(studente, esame)>
+<!ELEMENT studente(nome+, cognome)>
+<!ATTLIST studente
+  cdl Enumerated #REQUIRED
+  matr CDATA #REQUIRED
+]>
+<!ELEMENT nome(#PCDATA)>
+<!ELEMENT cognome(#PCDATA)>
+<!ELEMENT esame(materia, docente+, voto, lode, data)>
+<!ELEMENT materia(#PCDATA)>
+<!ELEMENT docente(#PCDATA)>
+<!ELEMENT voto(#PCDATA)>
+<!ELEMENT lode(#PCDATA)>
+<!ELEMENT data(#PCDATA)>
