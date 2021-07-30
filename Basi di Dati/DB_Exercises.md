@@ -44,3 +44,34 @@ Serves ( pizzeria, pizza, price ), (pizzeria, pizza) is a key
    R1 = σ pizza='pepperoni' (Serves)<br>
    R2 = R1<br>
    (R1) JOIN R1.price<=R2.price (R2)<br>
+
+### [Washington University](https://courses.cs.washington.edu/courses/cse444/02sp/slides/Relational%20Algebra%20Exercises.htm)
+
+Product ( pid, name, price, category, maker-cid), pid is a key
+Purchase (buyer-ssn, seller-ssn, store, pid)
+Company (cid, name, stock-price, country), cid is a key
+Person(ssn, name, phone number, city), ssn is a key
+
+1. <span style="color:red">Question:</span> Find people who bought telephony products<br>
+   <span style="color:blue">Answer:</span> π buyer-ssn ((Purchase) NATURAL JOIN (π pid (σ category='telephony' (Product))))<br>
+
+1. <span style="color:red">Question:</span> Find names of people who bought American products<br>
+   <span style="color:blue">Answer:</span> π name ((Person) JOIN ssn=buyer-ssn (π buyer-ssn ((Purchase) NATURAL JOIN (π pid ((Product) JOIN maker-cid=cid (π cid (σ country='America' (Company))))))))<br>
+
+1. <span style="color:red">Question:</span> Find names of people who bought American products and did not buy French products<br>
+   <span style="color:blue">Answer:</span><br>
+   R1 = π name ((Person) JOIN ssn=buyer-ssn (π buyer-ssn ((Purchase) NATURAL JOIN (π pid ((Product) NATURAL JOIN (π cid (σ country='America' (Company))))))))<br>
+   R2 = π name ((Person) JOIN ssn=buyer-ssn (π buyer-ssn ((Purchase) NATURAL JOIN (π pid ((Product) NATURAL JOIN (π cid (σ country='France' (Company))))))))<br>
+   R1 - R2
+
+1. <span style="color:red">Question:</span> Find names of people who bought American products and they live in Seattle<br>
+   <span style="color:blue">Answer:</span><br>
+   R1 = π name ((Person) JOIN ssn=buyer-ssn (π buyer-ssn ((Purchase) NATURAL JOIN (π pid ((Product) NATURAL JOIN (π cid (σ country='America' (Company))))))))<br>
+   R2 = π name (σ city='Seattle' (Person))<br>
+   R1 NATURAL JOIN R2<br>
+
+1. <span style="color:red">Question:</span> Find people who bought stuff from Joe or bought products from a company whose stock prices is more than $50<br>
+   <span style="color:blue">Answer:</span><br>
+   R1 = π buyer-ssn ((σ name='Joe' (Person)) JOIN ssn=seller-ssn (Purchase))<br>
+   R2 = π buyer-ssn (Purchase) NATURAL JOIN (π pid ((Product) JOIN maker-cid=cid (π cid (σ stock-price>50 (Company)))))<br>
+   R1 UNION R2
