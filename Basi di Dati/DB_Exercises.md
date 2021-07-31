@@ -75,3 +75,40 @@ Person(ssn, name, phone number, city), ssn is a key
    R1 = π buyer-ssn ((σ name='Joe' (Person)) JOIN ssn=seller-ssn (Purchase))<br>
    R2 = π buyer-ssn (Purchase) NATURAL JOIN (π pid ((Product) JOIN maker-cid=cid (π cid (σ stock-price>50 (Company)))))<br>
    R1 UNION R2
+
+### [Bologna University](https://www.cs.unibo.it/~montesi/BD/ES2016-17/01.%20Relational%20Algebra.pdf)
+
+Employee(Code, Name Surname), code is a key
+BelongsTo(Employee, Office), Employee is a key
+
+1. <span style="color:red">Question:</span> Return codes of employees with no office<br>
+   <span style="color:blue">Answer:</span> π Code (Employee) - δ Employee=Code (π Employee (BelongsTo))<br>
+
+State(Name, Area), Name is a key
+City(Code, Name, Inhabitants), Code is a key
+FormedOf(State, City), (State, City) is a key
+
+1. <span style="color:red">Question:</span> Return the names of the USA States having cities with more than 1.000.000 inhabitants<br>
+   <span style="color:blue">Answer:</span> π State ((FormedOf) JOIN City=Code (σ inhabitants>1000000 (City)))<br>
+
+1. <span style="color:red">Question:</span> City names belonging to states larger than 10000 squared miles<br>
+   <span style="color:blue">Answer:</span> π Name ((City) JOIN Code=City ((FormedOf) JOIN Name = State (σ Area>10000 (State))))<br>
+
+Person(ID, Name, Surname, Age), ID is a key
+Registration(Person,Lecture), (Person, Lecture) is a key
+Lecture(Name,Price), Name is a key
+
+1. <span style="color:red">Question:</span> People’s names which are registred for a lecture that costs more than 10 times their age<br>
+   <span style="color:blue">Answer:</span>π Person.name (σ Price>10xAge (Lecture JOIN Lecture.Name = Registration.Lecture ((Person) JOIN ID=Person (Registration))))<br>
+
+User(Tax,Surname,Birth), Tax is a key
+Field(FCode,IsCovered), FCode is a key
+Bookings(FCode,Day,TimeStart,TimeEnd,Tax), FCode is a key
+
+1. <span style="color:red">Question:</span> Tax code of the users that have booked at least two times a “non covered field” and that have never booked a covered field<br>
+   <span style="color:blue">Answer:</span><br>
+   R1 = (Bookings) NATURAL JOIN (σ IsCovered=False (Field))<br>
+   R2 = R1<br>
+   R3 = π Tax ((R1) JOIN R1.Tax=R2.Tax AND (R1.TimeEnd<R2.Start OR R1.Day<R2.Day) (R2))<br>
+   R4 = π Tax (Bookings) NATURAL JOIN (σ IsCovered=True (Field))<br>
+   R3 - R4
