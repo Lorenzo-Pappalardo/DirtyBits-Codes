@@ -112,3 +112,55 @@ Bookings(FCode,Day,TimeStart,TimeEnd,Tax), FCode is a key
    R3 = π Tax ((R1) JOIN R1.Tax=R2.Tax AND (R1.TimeEnd<R2.Start OR R1.Day<R2.Day) (R2))<br>
    R4 = π Tax (Bookings) NATURAL JOIN (σ IsCovered=True (Field))<br>
    R3 - R4
+
+### Esame 9/12/2020
+
+Studente(matricola,nome,cognome), matricola è una chiave
+Materia(id,titolo,descrizione), id è una chiave
+Esercizi(id,testo,soluzione, materia,numerosoluzioni), id è una chiave e materia è una chiave esterna
+Risolto(idesercizio,idstudente,data), (idesercizio, idstudente) è una chiave, anche esterna
+
+Algebra Relazionale
+
+1. <span style="color:red">Domanda:</span> Trovare gli studenti che non hanno risolto esercizi per la materia “basi di dati”<br>
+   <span style="color:blue">Risposta:</span> π matricola (Studente) - δ idstudente=matricola (π idstudente ((Risolto) NATURAL JOIN (δ id=idesercizio (Esercizi) NATURAL JOIN (δ id=materia (π id (σ titolo='basi di dati' (Materia)))))))<br>
+
+1. <span style="color:red">Domanda:</span> Trovare le materie per cui sono stati risolti tutti gli esercizi<br>
+   <span style="color:blue">Risposta:</span> π materia (π materia, id (Esercizi) - (π materia, id (Esercizi) - (π materia, id (Esercizi) JOIN id=idesercizio (Risolto))))<br>
+
+SQL
+
+1. <span style="color:red">Domanda:</span> Per ogni materia contare il numero di esercizi disponibili e quelli risolti<br>
+   <span style="color:blue">Risposta:</span><br>
+   CREATE VIEW Disponibili (materia, disponibili) AS<br>
+   SELECT materia, COUNT(id)<br>
+   FROM Esercizi<br>
+   GROUP BY materia<br>
+
+   CREATE VIEW Risolti (materia, risolti) AS<br>
+   SELECT materia, COUNT(DISTINCT idesercizio)<br>
+   FROM Risolto R JOIN Esercizi E<br>
+   ON R.idesercizio=E.id<br>
+   GROUP BY materia<br>
+
+   (Disponibili) NATURAL JOIN (Risolti)
+
+1. <span style="color:red">Domanda:</span> Trovare gli esercizi che contengono la parola “SQL” che non sono stati risolti<br>
+   <span style="color:blue">Risposta:</span><br>
+   SELECT id<br>
+   FROM Esercizi E<br>
+   WHERE E.testo LIKE '%SQL%'<br>
+   AND<br>
+   E.id NOT IN (<br>
+   SELECT idesercizio<br>
+   FROM Risolto<br>
+   );<br>
+
+1. <span style="color:red">Domanda:</span> Implementare un trigger in SQL che ogni qualvolta viene inserita una soluzione per un esercizio nella relazione Risolto aggiorna il campo della tabella esercizi<br>
+   <span style="color:blue">Risposta:</span><br>
+   CREATE TRIGGER AggiornamentoEsercizi<br>
+   AFTER INSERT ON Risolto<br>
+   FOR EACH ROW<br>
+   UPDATE Esercizi<br>
+   SET numerosoluzioni = numerosoluzioni + 1<br>
+   WHERE Esercizi.id = New.idesercizio<br>
