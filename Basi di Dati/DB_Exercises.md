@@ -182,5 +182,54 @@ Algebra Relazionale
 
 SQL
 
-1. <span style="color:red">Domanda:</span><br>
+1. <span style="color:red">Domanda:</span> Implementare un vincolo che non consenta di inserire in Letto un libro di una saga se non nel corretto ordine cronologico (V1, V2,…)<br>
+   <span style="color:blue">Risposta:</span><br>
+   CREATE TRIGGER InOrdine<br>
+   AFTER INSERT ON Letto<br>
+   FOR EACH ROW<br>
+   DECLARE @saga INT, @volume INT, @sagaLetto INT;
+
+   SET @saga = (SELECT saga
+   FROM Libro
+   WHERE Libro.id = NEW.libro);
+
+   SET @volume = (SELECT volume
+   FROM Libro
+   WHERE Libro.id = NEW.libro);
+
+   IF @volume < (SELECT volume
+   FROM Libro, Letto
+   WHERE Libro.saga = @saga
+   AND Letto.persona = NEW.persona
+   ORDER BY volume DESC
+   LIMIT 1)
+   DELETE FROM Letto
+   WHERE Letto.libro = NEW.libro
+   AND Letto.persona = NEW.persona
+
+   IDK
+
+1. <span style="color:red">Domanda:</span> Per ogni autore contare il numero di libri e il numero di lettori distinti e il numero di recensioni avute da persone distinte<br>
+   <span style="color:blue">Risposta:</span><br>
+   CREATE VIEW Libri (Autore, 'Numero di libri') AS
+   SELECT autore, COUNT(id)
+   FROM Persona P JOIN Libro L
+   ON P.cf = L.autore
+   GROUP BY autore;
+
+   CREATE VIEW Lettori (Autore, 'Numero di lettori') AS
+   SELECT autore, SUM(numerodilettori)
+   FROM Persona P JOIN Libro L
+   ON P.cf = L.autore
+   GROUP BY autore;
+
+   CREATE VIEW Recensioni (Autore, 'Numero di recensioni') AS
+   SELECT autore, COUNT(DISTINCT persona)
+   FROM Libro L JOIN Recensione R
+   ON L.id = R.libro
+   GROUP BY autore;
+
+   Libri NATURAL JOIN Lettori NATURAL JOIN Recensioni
+
+1. <span style="color:red">Domanda:</span> <br>
    <span style="color:blue">Risposta:</span><br>
