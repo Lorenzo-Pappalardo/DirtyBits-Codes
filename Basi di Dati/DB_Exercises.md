@@ -164,3 +164,23 @@ SQL
    UPDATE Esercizi<br>
    SET numerosoluzioni = numerosoluzioni + 1<br>
    WHERE Esercizi.id = New.idesercizio<br>
+
+### Itinere 9/12/2021
+
+Persona (cf, nome, cognome), cf è una chiave
+Libro (id, titolo, descrizione, autore, numerodilettori, datauscita, saga, volume), id è una chiave
+Recensione (id, libro, testo, data, persona), id è una chiave
+Letto(libro, persona, data), tutti sono chiavi
+
+Algebra Relazionale
+
+1. <span style="color:red">Domanda:</span> Trovare i libri che hanno almeno 2 recensioni ma che non sono stati letti<br>
+   <span style="color:blue">Risposta:</span> π libro ((Recensioni) JOIN libro=libro1 AND id>id1 (δ id=id1, libro=libro1, testo=testo1, data=data1, persona=persona1 (Recensioni))) - π libro (Letto)<br>
+
+1. <span style="color:red">Domanda:</span> Trovare le persone che hanno letto tutti i libri di “JK Rowling”<br>
+   <span style="color:blue">Risposta:</span> π persona (π libro, persona (Letto) / δ id=libro (π id (σ autore='JK Rowling' (Libro))))<br>
+
+SQL
+
+1. <span style="color:red">Domanda:</span><br>
+   <span style="color:blue">Risposta:</span><br>
