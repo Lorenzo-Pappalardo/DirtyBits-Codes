@@ -2,6 +2,8 @@
 
 ### [Stanford University](http://openclassroom.stanford.edu/MainFolder/courses/IntroToDatabases/old-site/docs/backup/ra-exercises.html)
 
+##### DB
+
 Person ( name, age, gender ), name is a key
 Frequents ( name, pizzeria ), (name, pizzeria) is a key
 Eats ( name, pizza ), (name, pizza) is a key
@@ -47,6 +49,8 @@ Serves ( pizzeria, pizza, price ), (pizzeria, pizza) is a key
 
 ### [Washington University](https://courses.cs.washington.edu/courses/cse444/02sp/slides/Relational%20Algebra%20Exercises.htm)
 
+##### DB
+
 Product ( pid, name, price, category, maker-cid), pid is a key
 Purchase (buyer-ssn, seller-ssn, store, pid)
 Company (cid, name, stock-price, country), cid is a key
@@ -78,11 +82,15 @@ Person(ssn, name, phone number, city), ssn is a key
 
 ### [Bologna University](https://www.cs.unibo.it/~montesi/BD/ES2016-17/01.%20Relational%20Algebra.pdf)
 
+##### DB
+
 Employee(Code, Name Surname), code is a key
 BelongsTo(Employee, Office), Employee is a key
 
 1. <span style="color:red">Question:</span> Return codes of employees with no office<br>
    <span style="color:blue">Answer:</span> π Code (Employee) - δ Employee=Code (π Employee (BelongsTo))<br>
+
+##### DB
 
 State(Name, Area), Name is a key
 City(Code, Name, Inhabitants), Code is a key
@@ -94,12 +102,16 @@ FormedOf(State, City), (State, City) is a key
 1. <span style="color:red">Question:</span> City names belonging to states larger than 10000 squared miles<br>
    <span style="color:blue">Answer:</span> π Name ((City) JOIN Code=City ((FormedOf) JOIN Name = State (σ Area>10000 (State))))<br>
 
+##### DB
+
 Person(ID, Name, Surname, Age), ID is a key
 Registration(Person,Lecture), (Person, Lecture) is a key
 Lecture(Name,Price), Name is a key
 
 1. <span style="color:red">Question:</span> People’s names which are registred for a lecture that costs more than 10 times their age<br>
    <span style="color:blue">Answer:</span>π Person.name (σ Price>10xAge (Lecture JOIN Lecture.Name = Registration.Lecture ((Person) JOIN ID=Person (Registration))))<br>
+
+##### DB
 
 User(Tax,Surname,Birth), Tax is a key
 Field(FCode,IsCovered), FCode is a key
@@ -115,12 +127,14 @@ Bookings(FCode,Day,TimeStart,TimeEnd,Tax), FCode is a key
 
 ### Esame 9/12/2020
 
+##### DB
+
 Studente(matricola,nome,cognome), matricola è una chiave
 Materia(id,titolo,descrizione), id è una chiave
 Esercizi(id,testo,soluzione, materia,numerosoluzioni), id è una chiave e materia è una chiave esterna
 Risolto(idesercizio,idstudente,data), (idesercizio, idstudente) è una chiave, anche esterna
 
-Algebra Relazionale
+##### Algebra Relazionale
 
 1. <span style="color:red">Domanda:</span> Trovare gli studenti che non hanno risolto esercizi per la materia “basi di dati”<br>
    <span style="color:blue">Risposta:</span> π matricola (Studente) - δ idstudente=matricola (π idstudente ((Risolto) NATURAL JOIN (δ id=idesercizio (Esercizi) NATURAL JOIN (δ id=materia (π id (σ titolo='basi di dati' (Materia)))))))<br>
@@ -128,7 +142,7 @@ Algebra Relazionale
 1. <span style="color:red">Domanda:</span> Trovare le materie per cui sono stati risolti tutti gli esercizi<br>
    <span style="color:blue">Risposta:</span> π materia (π materia, id (Esercizi) - (π materia, id (Esercizi) - (π materia, id (Esercizi) JOIN id=idesercizio (Risolto))))<br>
 
-SQL
+##### SQL
 
 1. <span style="color:red">Domanda:</span> Per ogni materia contare il numero di esercizi disponibili e quelli risolti<br>
    <span style="color:blue">Risposta:</span><br>
@@ -165,14 +179,16 @@ SQL
    SET numerosoluzioni = numerosoluzioni + 1<br>
    WHERE Esercizi.id = New.idesercizio<br>
 
-### Itinere 9/12/2021
+### Itinere 1 - 9/12/2021
+
+##### DB
 
 Persona (cf, nome, cognome), cf è una chiave
 Libro (id, titolo, descrizione, autore, numerodilettori, datauscita, saga, volume), id è una chiave
 Recensione (id, libro, testo, data, persona), id è una chiave
 Letto(libro, persona, data), tutti sono chiavi
 
-Algebra Relazionale
+##### Algebra Relazionale
 
 1. <span style="color:red">Domanda:</span> Trovare i libri che hanno almeno 2 recensioni ma che non sono stati letti<br>
    <span style="color:blue">Risposta:</span> π libro ((Recensioni) JOIN libro=libro1 AND id>id1 (δ id=id1, libro=libro1, testo=testo1, data=data1, persona=persona1 (Recensioni))) - π libro (Letto)<br>
@@ -180,7 +196,7 @@ Algebra Relazionale
 1. <span style="color:red">Domanda:</span> Trovare le persone che hanno letto tutti i libri di “JK Rowling”<br>
    <span style="color:blue">Risposta:</span> π persona (π libro, persona (Letto) / δ id=libro (π id (σ autore='JK Rowling' (Libro))))<br>
 
-SQL
+##### SQL
 
 1. <span style="color:red">Domanda:</span> Implementare un vincolo che non consenta di inserire in Letto un libro di una saga se non nel corretto ordine cronologico (V1, V2,…)<br>
    <span style="color:blue">Risposta:</span><br>
@@ -231,5 +247,36 @@ SQL
 
    Libri NATURAL JOIN Lettori NATURAL JOIN Recensioni
 
-1. <span style="color:red">Domanda:</span> <br>
+### Itinere 2 - 9/12/2021
+
+##### DB
+
+AutoPosseduta(targa,idauto ,costorifornimenti,dataimmatricolazione), targa è una chiave
+Auto(id,marca, alimentazione,cilindrata), id è una chiave
+Rifornimento(targa,data,prezzolitro,litri), (targa, data) è una chiave
+Manutenzione(targa,data,descrizione,costo), (targa, data) è una chiave
+
+##### Algebra Relazionale
+
+1. <span style="color:red">Domanda:</span> Trovare le auto, indicando marca e modello, che non sono state vendute<br>
+   <span style="color:blue">Risposta:</span> π marca,id ((Auto) NATURAL JOIN (π id (Auto) - (δ idauto=id (π idauto (AutoPosseduta))))) <br>
+
+1. <span style="color:red">Domanda:</span> Per ogni marca trovare le auto con la cilindrata maggiore<br>
    <span style="color:blue">Risposta:</span><br>
+   R1 = Auto<br>
+   R2 = R1<br>
+   π marca,cilindrata (Auto) - (π R1.marca,R1.cilindrata ((R1) JOIN R1.marca=R2.marca AND R1.cilindrata<R2.cilindrata (R2)))<br>
+
+##### SQL
+
+1. <span style="color:red">Domanda:</span> Trovare le marche di automobili che hanno venduto tutti i modelli<br>
+   <span style="color:blue">Risposta:</span><br>
+   SELECT DISTINCT marca
+   FROM Auto A
+   WHERE NOT EXISTS ( SELECT id
+   FROM Auto A1
+   WHERE A.marca = A1.marca
+   AND NOT EXISTS ( SELECT idauto
+   FROM AutoPosseduta AP
+   WHERE A1.id = AP.idauto
+   ));
