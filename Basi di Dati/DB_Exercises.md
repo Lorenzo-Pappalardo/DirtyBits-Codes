@@ -280,3 +280,27 @@ Manutenzione(targa,data,descrizione,costo), (targa, data) è una chiave
    FROM AutoPosseduta AP
    WHERE A1.id = AP.idauto
    ));
+
+1. <span style="color:red">Domanda:</span> Per ogni auto posseduta mostrare quelle per il quale il numero di manutenzioni effettuate è maggiore di quello medio. Per queste visualizzare pure il costo totale della manutenzione<br>
+   <span style="color:blue">Risposta:</span><br>
+   CREATE VIEW NumeroManutenzioni (targa, numManutenzioni) AS
+   SELECT targa, COUNT(data), SUM (costo)
+   FROM AutoPosseduta AP LEFT JOIN Manutenzione M
+   ON AP.targa = M.targa
+   GROUP BY AP.targa;
+
+   SELECT \*
+   FROM AutoPossedute AP JOIN NumeroManutenzioni NM
+   ON AP.targa = NM.targa
+   WHERE NM.numManutenzioni >
+   (SELECT AVG(numManutenzioni)
+   FROM NumeroManutenzioni);
+
+1. <span style="color:red">Domanda:</span> Implementare un trigger che ogni qualvolta viene inserito un rifornimento in Rifornimento aggiorna il costo complessivo in AutoPosseduta<br>
+   <span style="color:blue">Risposta:</span><br>
+   CREATE TRIGGER InserimentoRifornimento
+   AFTER INSERT ON Rifornimento
+   FOR EACH ROW
+   UPDATE AutoPosseduta
+   SET costorifornimenti = costorifornimenti + (NEW.prezzolitro \* NEW.litri)
+   WHERE targa = NEW.targa;
