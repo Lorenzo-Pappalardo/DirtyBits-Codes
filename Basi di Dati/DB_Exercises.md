@@ -312,7 +312,7 @@ Manutenzione(targa,data,descrizione,costo), (targa, data) è una chiave<br>
 Libro(id,titolo,descrizione,autore ,datauscita,sequeldi ,genere), id è una chiave<br>
 CopiaLibro(collocazione,idlibro), collocazione è una chiave<br>
 Persona(id,nome,cognome,prestiti), id è una chiave<br>
-Prestito(libro,persona,dataprestito,datarestituzione,restitutito), (libro, persona, dataprestito) è una chiave<br>
+Prestito(libro,persona,dataprestito,datarestituzione,restituito), (libro, persona, dataprestito) è una chiave<br>
 
 ##### Algebra Relazionale
 
@@ -358,6 +358,32 @@ Prestito(libro,persona,dataprestito,datarestituzione,restitutito), (libro, perso
 
 1. **Domanda:** Trovare libri che hanno avuto piu’ prestiti di quelli medi avuti da ogni libro<br>
    **Risposta:**<br>
+   CREATE VIEW NumeroPrestiti (libro, prestiti) AS<br>
+   SELECT COUNT(\*)<br>
+   FROM Prestito<br>
+   GROUP BY libro;<br>
 
-1. **Domanda:**<br>
+   SELECT libro<br>
+   FROM NumeroPrestiti NP<br>
+   WHERE NP.prestiti > (<br>
+   SELECT AVG(prestiti)<br>
+   FROM NumeroPrestiti<br>
+   );<br>
+
+1. **Domanda:**<br> Implementare un vincolo che non consenta di inserire un nuovo prestito per una persona che ha ancora un libro prestato e non restituito<br>
    **Risposta:**<br>
+   CREATE TRIGGER ControlloPersona<br>
+   AFTER INSERT ON Prestito<br>
+   FOR EACH ROW<br>
+   IF (<br>
+   EXISTS (<br>
+   SELECT \*<br>
+   FROM Prestito<br>
+   WHERE Prestito.persona = NEW.persona<br>
+   AND dataprestito < NEW.dataprestito<br>
+   AND Prestito.restituito IS NULL<br>
+   ))<br>
+   DELETE FROM Prestito P<br>
+   WHERE P.libro = NEW.libro<br>
+   AND P.persona = NEW.persona<br>
+   AND P.dataprestito = NEW.dataprestito;<br>
