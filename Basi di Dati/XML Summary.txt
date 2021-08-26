@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>     encoding and standalone not required
+<?xml-stylesheet type="text/css" href="style.css"?>         link to stylesheet
+<!DOCTYPE Corso SYSTEM “corso.dtd”>                         link to grammar rules
+
+<!DOCTYPE NAME [                                            grammar rules directly inside xml
+<!ELEMENT ELEMENT1 (ELEMENT1+, ELEMENT2*, ELEMENT3?)>       +: one or more, *: zero or more, ?: zero or only one
+<!ELEMENT ELEMENT1 (#PCDATA)>                               #PCDATA means string
+<!ELEMENT ELEMENT2 (#PCDATA)>
+<!ELEMENT ELEMENT3 (#PCDATA)>
+<!ATTLIST ELEMENT3                                          list of attributes for ELEMENT3
+    ATTRIBUTE1 CDATA #REQUIRED                              CDATA is a string, #REQUIRED means has to be defined
+    ATTRIBUTE2 CDATA #IMPLIED                               #IMPLIED means it is optional
+    ATTRIBUTE3 CDATA "xD" #FIXED                            #FIXED means it has a default value, which is "xD" in this case
+>
+<!ENTITY Entity1 "Praise the sun!"                          it is a constant
+<!ENTITY Entity2 SYSTEM “entity.txt”>                       it can also be defined in another file
+]>
+
+<root
+    xmlns:ct=“URI”>                                         root Element (doens't have to be called "root")
+    <tag attribute1="Hello World" attribute2="18">          element is defined by a name ("tag" in this case) and attributes ("attribute1" and "attribute2" in this case)
+        <inside>This is a text</inside>
+    </tag>
+    <tag>
+        <memes></memes>
+    </tag>
+</root>
+
+
+
+XPATH: navigate through xml nodes
+
+.   Nodo corrente
+..  Nodo padre del nodo corrente
+/   nodo radice, o figlio del nodo corrente
+//  discendente del nodo corrente
+@   attributo del nodo corrente
+*   qualsiasi nodo
+[p] predicato (se l’espressione p, valutata, ha valore booleano)
+[n] posizione (se l’espressione n, valutata, ha valore numerico)
+
+doc ("file.xml”)/root/tag                                   returns all "tag" tags
+doc ("file.xml”)//tag                                       returns all "tag" tags at any depth
+doc ("file.xml”)/root/tag[attribute1=""Hello World]         returns all "tag" tags which have "attribute1" set to "Hello World"
+doc ("file.xml”)/root/tag/*                                 returns all tags inside "tag" tags
+doc ("file.xml”)/root/tag[1]/*                              returns all tags inside THE FIRST "tag" tag, which is only "inside" in this case
+
+
+
+XQUERY: XPATH on steroids
+
+FOR
+LET
+WHERE
+ORDER BY
+RETURN
+
+This:
+    for $libro in doc(“libri.xml”)//Libro
+    where $libro/Editore=“Bompiani”
+    and $libro/@disponibilità=“S”
+    return $libro
+
+is equal to:
+    for $libro in doc(“libri.xml”)//Libro[Editore=“Bompiani” and @disponibilità=“S”]
+    return $libro
+
+
+for $libro in doc(“libri.xml”)//Libro
+where $libro/Editore=“Bompiani”
+return  <LibroBompiani>
+            { $libro/Titolo }
+        </LibroBompiani>                    returns a list of <LibroBompiani> tags
+
+let $libri in doc(“libri.xml”)//Libro[Editore=“Bompiani”]
+return  <Libro-Bompiani>
+            { $libri/Titolo }
+        </Libro-Bompiani>                   returns only one <LibroBompiani> tags with many books' titles
+
+Other functions:
+    order by $libro/Titolo
+    count($libro)
+    distinct-values($libro/Titolo)
+    return <Libro>
+    {
+        if (condition = true)
+        then <tag>
+        else ()
+    }
+    </Libro>                                returns <Libro> tags with <tag> inside only if the condition is true
