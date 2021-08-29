@@ -387,3 +387,41 @@ Prestito(libro,persona,dataprestito,datarestituzione,restituito), (libro, person
    WHERE P.libro = NEW.libro<br>
    AND P.persona = NEW.persona<br>
    AND P.dataprestito = NEW.dataprestito;<br>
+
+### Esercitazioni Varie
+
+Libro(titolo, autore, data_prima_pubblicazione)<br>
+Autore(id, nome, cognome)<br>
+Genere(id,nome,descrizione)<br>
+GenereLibro(idg,titolo)<br>
+Utente(cf,nome,cognome)<br>
+LibroLetto(cf,titolo,data,commenti)<br>
+GenerePreferito(cf,genere)<br>
+
+1. **Domanda:**<br> Implementare un trigger che ogni qualvolta viene inserito un record nella relazione LibroLetto si verifica per il particolare utente se sono stati letti almeno 10 libri del genere appena inserito, in questo caso viene inserito, se non esiste già, il record nella relazione GenerePreferito.<br>
+   **Risposta:**<br>
+   CREATE TRIGGER T1<br>
+   AFTER INSERT ON LibroLetto<br>
+   FOR EACH ROW<br>
+   DECLARE X<br>
+   SET X = (<br>
+   SELECT idg<br>
+   FROM GenereLibro gl<br>
+   WHERE gl.titolo = NEW.titolo<br>
+   )<br>
+   IF (<br>
+   SELECT COUNT(DISTINCT titolo)<br>
+   FROM LibroLetto ll JOIN GenereLibro gl<br>
+   ON ll.titolo = gl.titolo<br>
+   WHERE ll.cf = NEW.cf<br>
+   AND gl.idg = X<br>
+   ) >= 10<br>
+   THEN (<br>
+   IF (NOT EXISTS (<br>
+   SELECT \*<br>
+   FROM GenerePreferito gp<br>
+   WHERE gp.cf = NEW.cf<br>
+   AND gp.genere = X<br>
+   )) THEN<br>
+   INSERT INTO GenerePreferito VALUES (NEW.cf, X)<br>
+   )<br>
