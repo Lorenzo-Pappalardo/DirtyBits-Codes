@@ -10,5 +10,19 @@ import java.util.Map;
 
 public class Main {
   public static void main(String[] args) {
+    try {
+      final KeyValuePairsFile file = new KeyValuePairsFileProxy(Path.of("C:\\Users\\loren\\Desktop\\Progetto_ISD\\LEXICON"));
+      final Map<String, List<String>> keyValuePairs;
+
+      try {
+        keyValuePairs = file.getKeyValuePairs();
+
+        System.out.println(keyValuePairs);
+      } catch (IOException e2) {
+        System.err.println("Read error!");
+      }
+    } catch (IOException e) {
+      System.err.println("Not a file!");
+    }
   }
 }
