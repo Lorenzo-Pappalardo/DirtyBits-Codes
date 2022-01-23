@@ -1,25 +1,28 @@
 package it.isd;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.LineNumberReader;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Splitter {
   final Path pathToOriginalFile;
   final Path pathToOriginalFileDirectory;
-  final int maxBytesPerFile;
+  final int maxRecordsPerFile;
 
-  public Splitter(Path pathToOriginalFile, int maxBytesPerFile) {
+  public Splitter(Path pathToOriginalFile, int maxRecordsPerFile) {
     this.pathToOriginalFile = pathToOriginalFile;
     this.pathToOriginalFileDirectory = pathToOriginalFile.resolveSibling("").toAbsolutePath();
-    this.maxBytesPerFile = maxBytesPerFile;
+    this.maxRecordsPerFile = maxRecordsPerFile;
   }
 
   private Path createNewPartialFile(int id) {
@@ -48,23 +51,39 @@ public class Splitter {
 
   public List<Path> splitFile() {
     List<Path> newFilesNames = new ArrayList<>();
-    int newFilesIndex = 0;
 
-    try (RandomAccessFile inputFile = new RandomAccessFile(pathToOriginalFile.toString(), "rw"); FileChannel inputChannel = inputFile.getChannel()) {
-      int bufferSize = maxBytesPerFile > inputChannel.size() ? (int)inputChannel.size() : maxBytesPerFile;
-      ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+    try (LineNumberReader reader = new LineNumberReader(new FileReader(pathToOriginalFile.toString()))) {
+      int newFilesIndex = 0;
 
-      while (inputChannel.read(buffer) > 0) {
+      while (reader.ready()) {
         newFilesNames.add(createNewPartialFile(newFilesIndex + 1));
-        RandomAccessFile outputFile = new RandomAccessFile(newFilesNames.get(newFilesIndex).toFile(), "rw");
-        outputFile.write(buffer.array());
-        buffer.clear();
+        FileChannel outputFile = FileChannel.open(newFilesNames.get(newFilesIndex), StandardOpenOption.WRITE);
+        List<String> buffer = new ArrayList<>();
+
+        int recordsRead = 0;
+        while (recordsRead < maxRecordsPerFile) {
+          final String line = reader.readLine();
+          if (line == null) {
+            break;
+          }
+
+          if (line.charAt(0) == '}') {
+            recordsRead++;
+          }
+
+          buffer.add(line);
+        }
+
+        outputFile.write(ByteBuffer.wrap(String.join("\n", buffer).getBytes(StandardCharsets.UTF_8)));
+        outputFile.close();
+
         newFilesIndex++;
       }
-    } catch (FileNotFoundException fnf) {
-      System.err.println("File " + pathToOriginalFile + " not found");
+    } catch (FileNotFoundException e) {
+      System.err.println("File not found");
+      System.exit(3);
     } catch (IOException e) {
-      System.err.println(e.getMessage());
+      System.err.println("Error encountered while splitting the file: " + pathToOriginalFile);
     }
 
     return newFilesNames;

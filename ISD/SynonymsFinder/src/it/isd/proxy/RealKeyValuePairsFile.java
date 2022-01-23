@@ -16,14 +16,10 @@ public class RealKeyValuePairsFile implements KeyValuePairsFile {
     this.pathToFile = pathToFile;
   }
 
-  private int megabytesToBytes(int megabytes) {
-    return megabytes * 1048576;
-  }
-
   @Override
   public Map<String, List<String>> getKeyValuePairs() throws IOException {
-    Splitter splitter = new Splitter(pathToFile, megabytesToBytes(1));
-    splitter.splitFile();
+    Splitter splitter = new Splitter(pathToFile, 1000);
+    List<Path> newFilesNames = splitter.splitFile();
     return keyValuePairsMap;
   }
 }
