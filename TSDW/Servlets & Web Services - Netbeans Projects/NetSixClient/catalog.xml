@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://localhost:8080/NetSix/NetSixWS?wsdl" uri="src/conf/xml-resources/web-service-references/NetSixWS/wsdl/localhost_8080/NetSix/NetSixWS.wsdl"/>
+    <system systemId="http://localhost:8080/NetSix/NetSixWS?xsd=1" uri="src/conf/xml-resources/web-service-references/NetSixWS/wsdl/localhost_8080/NetSix/NetSixWS.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/NetSixHashMap/NSixHashMap?wsdl" uri="src/conf/xml-resources/web-service-references/NSixHashMap/wsdl/localhost_8080/NetSixHashMap/NSixHashMap.wsdl"/>
+    <system systemId="http://localhost:8080/NetSixHashMap/NSixHashMap?xsd=1" uri="src/conf/xml-resources/web-service-references/NSixHashMap/wsdl/localhost_8080/NetSixHashMap/NSixHashMap.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/NetSixWS/NSixHashMap?wsdl" uri="src/conf/xml-resources/web-service-references/NSixHashMap/wsdl/localhost_8080/NetSixWS/NSixHashMap.wsdl"/>
+    <system systemId="http://localhost:8080/NetSixWS/NSixHashMap?xsd=1" uri="src/conf/xml-resources/web-service-references/NSixHashMap/wsdl/localhost_8080/NetSixWS/NSixHashMap.xsd_1.xsd"/>
+</catalog>
