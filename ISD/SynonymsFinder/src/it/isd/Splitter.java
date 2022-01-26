@@ -17,16 +17,18 @@ import java.util.List;
 public class Splitter {
   final Path pathToOriginalFile;
   final Path pathToOriginalFileDirectory;
+  final String delimiter;
   final int maxRecordsPerFile;
 
-  public Splitter(Path pathToOriginalFile, int maxRecordsPerFile) {
+  public Splitter(Path pathToOriginalFile, String delimiter, int maxRecordsPerFile) {
     this.pathToOriginalFile = pathToOriginalFile;
     this.pathToOriginalFileDirectory = pathToOriginalFile.resolveSibling("").toAbsolutePath();
+    this.delimiter = delimiter;
     this.maxRecordsPerFile = maxRecordsPerFile;
   }
 
   private Path createNewPartialFile(int id) {
-    Path partialsDirectory = Path.of(pathToOriginalFileDirectory.toString() + "\\Partials");
+    Path partialsDirectory = Path.of(pathToOriginalFileDirectory + "\\Partials");
     if (!Files.exists(partialsDirectory)) {
       try {
         Files.createDirectory(partialsDirectory);
@@ -36,7 +38,7 @@ public class Splitter {
       }
     }
 
-    Path tmpPath = Path.of(partialsDirectory.toString() + "\\" + pathToOriginalFile.getFileName().toString() + '_' + id + ".txt");
+    Path tmpPath = Path.of(partialsDirectory + "\\" + pathToOriginalFile.getFileName() + '_' + id + ".txt");
 
     try {
       Files.createFile(tmpPath);
@@ -67,7 +69,7 @@ public class Splitter {
             break;
           }
 
-          if (line.charAt(0) == '}') {
+          if (line.contains(delimiter)) {
             recordsRead++;
           }
 
