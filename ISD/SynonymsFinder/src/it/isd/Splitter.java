@@ -52,14 +52,14 @@ public class Splitter {
   }
 
   public List<Path> splitFile() {
-    List<Path> newFilesNames = new ArrayList<>();
+    List<Path> newFilesPath = new ArrayList<>();
 
     try (LineNumberReader reader = new LineNumberReader(new FileReader(pathToOriginalFile.toString()))) {
       int newFilesIndex = 0;
 
       while (reader.ready()) {
-        newFilesNames.add(createNewPartialFile(newFilesIndex + 1));
-        FileChannel outputFile = FileChannel.open(newFilesNames.get(newFilesIndex), StandardOpenOption.WRITE);
+        newFilesPath.add(createNewPartialFile(newFilesIndex + 1));
+        FileChannel outputFile = FileChannel.open(newFilesPath.get(newFilesIndex), StandardOpenOption.WRITE);
         List<String> buffer = new ArrayList<>();
 
         int recordsRead = 0;
@@ -88,6 +88,6 @@ public class Splitter {
       System.err.println("Error encountered while splitting the file: " + pathToOriginalFile);
     }
 
-    return newFilesNames;
+    return newFilesPath;
   }
 }

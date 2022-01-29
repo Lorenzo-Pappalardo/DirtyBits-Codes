@@ -1,6 +1,6 @@
-package it.isd;
+package it.isd.threads;
 
-import it.isd.threads.ExtractorThread;
+import it.isd.KeyValue;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,24 +10,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
-public class KeyValueExtractor {
+public class MapperThread implements Callable<Map<String, String>> {
   Path filePath;
   String delimiter;
+  final Map<String, String> map;
 
-  KeyValueExtractor(Path filePath, String delimiter) {
+  public MapperThread(Path filePath, String delimiter) {
     this.filePath = filePath;
     this.delimiter = delimiter;
+    map = new HashMap<>();
   }
 
-  public Map<String, String> getKeyValue() {
-    Map<String, String> map = new HashMap<>();
+  @Override
+  public Map<String, String> call() {
     List<Future<KeyValue<String, String>>> futures = new ArrayList<>();
-
     ExecutorService executor = Executors.newCachedThreadPool();
 
     try {

@@ -21,7 +21,16 @@ public class ExtractorThread extends WorkerThread implements Callable<KeyValue<S
     if (record.size() == 1) {
       String[] tmp = record.get(0).split(",");
       key = tmp[1];
-      value = tmp[5];
+      if (tmp.length >= 6) {
+        value = tmp[5];
+      }
+    } else {
+      for (String line : record) {
+        if (line.contains("base")) {
+          key = line.substring(6);
+          break;
+        }
+      }
     }
 
     return new KeyValue<>(key, value);
