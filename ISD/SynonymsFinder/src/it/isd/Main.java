@@ -34,10 +34,10 @@ public class Main {
     Splitter splitter = new Splitter(dictionaryFilepath, "}", 1000);
     List<Path> newFilesPaths = splitter.splitFile();
 
-    MapperThread mapper = new MapperThread(baseWordsFilePath, ",");
+    MapperThread mapper = new MapperThread("base_words", baseWordsFilePath, ",");
 
     Date start = new Date();
-    MapperThread dictionaryExtractor = new MapperThread(dictionaryFilepath, "}");
+    MapperThread dictionaryExtractor = new MapperThread("single_thread_dictionary", dictionaryFilepath, "}");
     dictionaryExtractor.call();
     System.out.println("Single thread: " + (new Date().getTime() - start.getTime()) + " ms");
 
@@ -46,7 +46,7 @@ public class Main {
 
     start = new Date();
     newFilesPaths.forEach(filePath -> {
-      futures.add(executor.submit(new MapperThread(filePath, "}")));
+      futures.add(executor.submit(new MapperThread("dictionary", filePath, "}")));
     });
 
     executor.shutdown();
