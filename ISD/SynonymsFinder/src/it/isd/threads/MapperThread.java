@@ -1,7 +1,5 @@
 package it.isd.threads;
 
-import it.isd.KeyValue;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,8 +23,8 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
     map = new HashMap<>();
   }
 
-  private KeyValue<String, String> extractKeyValue(List<String> record) {
-    String key = null;
+  private void extractKeyValue(List<String> record) {
+    String key;
     String value = null;
 
     if (record.size() == 1) {
@@ -35,16 +33,36 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
       if (tmp.length >= 6) {
         value = tmp[5];
       }
+
+      map.put(key, value);
     } else {
       for (String line : record) {
         if (line.contains("base")) {
           key = line.substring(6);
-          break;
+
+          map.put(key, null);
+        } else if (line.contains("acronym") || line.contains("abbreviation")) {
+          int startIndex = 0;
+          key = "";
+
+          if (line.contains("acronym")) {
+            startIndex = 12;
+          } else if (line.contains("abbreviation")) {
+            startIndex = 17;
+          }
+
+          for (int i = startIndex; i < line.length(); i++) {
+            if (line.charAt(i) != '|') {
+              key += line.charAt(i);
+            } else {
+              break;
+            }
+          }
+
+          map.put(key, null);
         }
       }
     }
-
-    return new KeyValue<>(key, value);
   }
 
   @Override
@@ -67,8 +85,7 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
         }
         tmpRecord.add(line);
 
-        KeyValue<String, String> kv = extractKeyValue(tmpRecord);
-        map.put(kv.key, kv.value);
+        extractKeyValue(tmpRecord);
       }
     } catch (IOException e) {
       System.err.println("MT_" + threadID + ": Error in reading the file.");
