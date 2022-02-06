@@ -23,6 +23,10 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
     map = new HashMap<>();
   }
 
+  /**
+   * Extracts key-value pairs from a record in a file and adds them to a map
+   * @param record List of strings representing a record in the original file
+   */
   private void extractKeyValue(List<String> record) {
     String key;
     String value = null;

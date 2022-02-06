@@ -1,13 +1,13 @@
 package it.isd;
 
 import it.isd.threads.MapperThread;
+import it.isd.threads.SimilarityEvaluatorThread;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -17,47 +17,52 @@ import java.util.concurrent.Future;
 
 public class Main {
   public static void main(String[] args) {
-    Path baseWordsFilePath = null;
+    Path baseFilePath = null;
     Path dictionaryFilepath = null;
 
-    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    try {
-      System.out.println("Insert path to the file which holds the base words:");
-      baseWordsFilePath = Path.of(input.readLine());
-      System.out.println("Insert path to the dictionary file:");
-      dictionaryFilepath = Path.of(input.readLine());
-    } catch (IOException e) {
-      System.err.println("Input error");
-      System.exit(1);
+    if (args.length >= 2) {
+      baseFilePath = Path.of(args[0]);
+      dictionaryFilepath = Path.of(args[1]);
+    }
+
+    if (baseFilePath == null || dictionaryFilepath == null) {
+      try (BufferedReader input = new BufferedReader(new InputStreamReader(System.in))) {
+        if (baseFilePath == null) {
+          System.out.println("Insert path to the file which holds the base words:");
+          baseFilePath = Path.of(input.readLine());
+        }
+        if (dictionaryFilepath == null) {
+          System.out.println("Insert path to the dictionary file:");
+          dictionaryFilepath = Path.of(input.readLine());
+        }
+      } catch (IOException e) {
+        System.err.println("Input error");
+        System.exit(1);
+      }
     }
 
     Splitter splitter = new Splitter(dictionaryFilepath, "}", 1000);
     List<Path> newFilesPaths = splitter.splitFile();
 
-    MapperThread mapper = new MapperThread("base_words", baseWordsFilePath, ",");
-
-    Date start = new Date();
-    MapperThread dictionaryExtractor = new MapperThread("single_thread_dictionary", dictionaryFilepath, "}");
-    dictionaryExtractor.call();
-    System.out.println("Single thread: " + (new Date().getTime() - start.getTime()) + " ms");
+    Map<String, String> baseMap = new MapperThread("base_pairs", baseFilePath, ",").call();
 
     List<Future<Map<String, String>>> futures = new ArrayList<>();
     ExecutorService executor = Executors.newCachedThreadPool();
 
-    start = new Date();
-    newFilesPaths.forEach(filePath -> {
-      futures.add(executor.submit(new MapperThread("dictionary", filePath, "}")));
-    });
+    newFilesPaths.forEach(filePath -> futures.add(executor.submit(new MapperThread("dictionary", filePath, "}"))));
 
-    executor.shutdown();
+    List<Map<String, String>> dictionaryMaps = new ArrayList<>();
 
     futures.forEach(future -> {
       try {
-        future.get();
+        dictionaryMaps.add(future.get());
       } catch (InterruptedException | ExecutionException e) {
-        e.printStackTrace();
+        System.err.println("Error getting Map from Future");
       }
     });
-    System.out.println("Multiple threads: " + (new Date().getTime() - start.getTime()) + " ms");
+
+    OutputWriter outputWriter = new OutputWriter(Path.of(dictionaryFilepath.resolveSibling("").toAbsolutePath() + "\\output.txt"));
+
+    dictionaryMaps.forEach(map -> executor.submit(new SimilarityEvaluatorThread(baseMap, map, outputWriter)));
   }
 }

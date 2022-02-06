@@ -19,16 +19,25 @@ public class Splitter {
   final Path pathToOriginalFileDirectory;
   final String delimiter;
   final int maxRecordsPerFile;
+  final Path partialsDirectory;
+  final List<Path> newFilesPath;
 
   public Splitter(Path pathToOriginalFile, String delimiter, int maxRecordsPerFile) {
     this.pathToOriginalFile = pathToOriginalFile;
     this.pathToOriginalFileDirectory = pathToOriginalFile.resolveSibling("").toAbsolutePath();
     this.delimiter = delimiter;
     this.maxRecordsPerFile = maxRecordsPerFile;
+    this.partialsDirectory = Path.of(pathToOriginalFileDirectory + "\\Partials");
+    this.newFilesPath = new ArrayList<>();
   }
 
+  /**
+   * Creates a new partial file with the specified id
+   *
+   * @param id ID to assign to the created file
+   * @return {@link Path} Path to the newly created file
+   */
   private Path createNewPartialFile(int id) {
-    Path partialsDirectory = Path.of(pathToOriginalFileDirectory + "\\Partials");
     if (!Files.exists(partialsDirectory)) {
       try {
         Files.createDirectory(partialsDirectory);
@@ -51,9 +60,12 @@ public class Splitter {
     return tmpPath;
   }
 
+  /**
+   * Reads a big file and splits its content across multiple partial files
+   *
+   * @return {@link List<Path>} List of Paths to the newly created partial files
+   */
   public List<Path> splitFile() {
-    List<Path> newFilesPath = new ArrayList<>();
-
     try (LineNumberReader reader = new LineNumberReader(new FileReader(pathToOriginalFile.toString()))) {
       int newFilesIndex = 0;
 
