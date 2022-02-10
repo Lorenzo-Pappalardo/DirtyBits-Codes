@@ -47,7 +47,10 @@ public class Splitter {
       }
     }
 
-    Path tmpPath = Path.of(partialsDirectory + "\\" + pathToOriginalFile.getFileName() + '_' + id + ".txt");
+    final int dotIndex = pathToOriginalFile.getFileName().toString().lastIndexOf(".");
+    final String fileNameWithoutExtension = pathToOriginalFile.getFileName().toString().substring(0, dotIndex);
+    final String fileExtension = pathToOriginalFile.getFileName().toString().substring(dotIndex);
+    Path tmpPath = Path.of(partialsDirectory + "\\" + fileNameWithoutExtension + '_' + id + fileExtension);
 
     try {
       Files.createFile(tmpPath);

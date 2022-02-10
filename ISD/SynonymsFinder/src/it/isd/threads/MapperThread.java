@@ -5,65 +5,72 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 public class MapperThread extends WorkerThread implements Callable<Map<String, String>> {
-  Path filePath;
-  String delimiter;
+  final Path filePath;
+  final String delimiter;
+  final int[] columnsToTake;
   final Map<String, String> map;
+  final List<String> stopWords;
 
-  public MapperThread(String threadID, Path filePath, String delimiter) {
+  public MapperThread(String threadID, Path filePath, String delimiter, int[] columnsToTake, List<String> stopWords) {
     super(threadID);
     this.filePath = filePath;
     this.delimiter = delimiter;
+    this.columnsToTake = columnsToTake;
+    this.stopWords = stopWords;
     map = new HashMap<>();
   }
 
   /**
    * Extracts key-value pairs from a record in a file and adds them to a map
-   * @param record List of strings representing a record in the original file
+   *
+   * @param recordLines List of strings representing a record in the original file
    */
-  private void extractKeyValue(List<String> record) {
-    String key;
+  private void extractKeyValue(List<String> recordLines) {
+    String key = null;
     String value = null;
 
-    if (record.size() == 1) {
-      String[] tmp = record.get(0).split(",");
-      key = tmp[1];
-      if (tmp.length >= 6) {
-        value = tmp[5];
+    if (recordLines.size() == 1) {
+      String[] record = recordLines.get(0).split(delimiter);
+      key = record[columnsToTake[0]];
+
+      String tmp = record[columnsToTake[1]].toLowerCase();
+      if (tmp.charAt(0) == '"') {
+        tmp = tmp.substring(1);
+      } else if (tmp.charAt(tmp.length() - 1) == '"') {
+        tmp = tmp.substring(0, tmp.length() - 1);
       }
 
-      map.put(key, value);
+      tmp = tmp.replaceAll("[!().,;-]", "");
+
+      String[] wordsArray = tmp.split(" ");
+      value = Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word)).collect(Collectors.joining(" "));
+
+
+      if (!value.equals("")) {
+        map.put(key, value);
+      }
     } else {
-      for (String line : record) {
+      for (String line : recordLines) {
         if (line.contains("base")) {
           key = line.substring(6);
-
-          map.put(key, null);
         } else if (line.contains("acronym") || line.contains("abbreviation")) {
-          int startIndex = 0;
-          key = "";
-
-          if (line.contains("acronym")) {
-            startIndex = 12;
-          } else if (line.contains("abbreviation")) {
-            startIndex = 17;
-          }
+          int startIndex = line.indexOf('=') + 1;
+          value = "";
 
           for (int i = startIndex; i < line.length(); i++) {
             if (line.charAt(i) != '|') {
-              key += line.charAt(i);
+              value += line.charAt(i);
             } else {
               break;
             }
           }
 
-          map.put(key, null);
+          map.put(key, value);
         }
       }
     }
