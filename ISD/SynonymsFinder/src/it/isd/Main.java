@@ -6,10 +6,7 @@ import it.isd.threads.SimilarityEvaluatorThread;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class Main {
   private static void stopWordsReader(Path stopWordsPath, List<String> stopWords) {
@@ -80,13 +77,21 @@ public class Main {
       try {
         dictionaryMaps.add(future.get());
       } catch (InterruptedException | ExecutionException e) {
-        System.err.println("Error getting Map from Future");
+        System.err.println("Error getting dictionary map from Future");
       }
     });
 
     Map<String, String> jaccardMap = Collections.synchronizedMap(new HashMap<>());
 
-    dictionaryMaps.forEach(map -> executor.submit(new SimilarityEvaluatorThread(baseMap, map, jaccardMap)));
+    List<SimilarityEvaluatorThread> callables = dictionaryMaps.stream().map(map -> new SimilarityEvaluatorThread(baseMap, map, jaccardMap)).toList();
+
+    List<Future<Boolean>> jaccardFutures;
+
+    try {
+      jaccardFutures = executor.invokeAll(callables);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
 
     executor.shutdown();
 

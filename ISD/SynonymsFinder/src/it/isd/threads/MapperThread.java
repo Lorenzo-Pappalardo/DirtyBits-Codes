@@ -38,20 +38,22 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
       String[] record = recordLines.get(0).split(delimiter);
       key = record[columnsToTake[0]];
 
-      String tmp = record[columnsToTake[1]].toLowerCase();
-      if (tmp.charAt(0) == '"') {
-        tmp = tmp.substring(1);
-      } else if (tmp.charAt(tmp.length() - 1) == '"') {
-        tmp = tmp.substring(0, tmp.length() - 1);
+      if (record.length > columnsToTake[1]) {
+        String tmp = record[columnsToTake[1]].toLowerCase();
+
+        if (tmp.charAt(0) == '"') {
+          tmp = tmp.substring(1);
+        } else if (tmp.charAt(tmp.length() - 1) == '"') {
+          tmp = tmp.substring(0, tmp.length() - 1);
+        }
+
+        tmp = tmp.replaceAll("[!().,;-]", "");
+
+        String[] wordsArray = tmp.split(" ");
+        value = Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word)).collect(Collectors.joining(" "));
       }
 
-      tmp = tmp.replaceAll("[!().,;-]", "");
-
-      String[] wordsArray = tmp.split(" ");
-      value = Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word)).collect(Collectors.joining(" "));
-
-
-      if (!value.equals("")) {
+      if (value != null && !value.equals("")) {
         map.put(key, value);
       }
     } else {

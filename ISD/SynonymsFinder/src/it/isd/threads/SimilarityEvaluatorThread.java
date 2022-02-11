@@ -3,8 +3,9 @@ package it.isd.threads;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
-public class SimilarityEvaluatorThread implements Runnable {
+public class SimilarityEvaluatorThread implements Callable<Boolean> {
   final Map<String, String> base;
   final Map<String, String> dictionary;
   final Map<String, String> outputMap;
@@ -29,7 +30,7 @@ public class SimilarityEvaluatorThread implements Runnable {
   }
 
   @Override
-  public void run() {
+  public Boolean call() {
     for (Map.Entry<String, String> baseEntry : base.entrySet()) {
       for (Map.Entry<String, String> dictionaryEntry : dictionary.entrySet()) {
         String resultKey = '(' + baseEntry.getKey() + ", " + dictionaryEntry.getKey() + ')';
@@ -42,5 +43,7 @@ public class SimilarityEvaluatorThread implements Runnable {
         }
       }
     }
+
+    return true;
   }
 }
