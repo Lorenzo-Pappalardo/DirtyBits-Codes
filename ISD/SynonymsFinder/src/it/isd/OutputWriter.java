@@ -16,7 +16,7 @@ public class OutputWriter {
 
   OutputWriter(Path outputFilePath) {
     try {
-      this.outputFile = FileChannel.open(outputFilePath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+      this.outputFile = FileChannel.open(outputFilePath, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
     } catch (IOException e) {
       System.err.println("Unable to open output file");
     }
@@ -45,7 +45,7 @@ public class OutputWriter {
     for (Map.Entry<String, String> entry : map.entrySet()) {
       try {
         Optional<String> values = Arrays.stream((entry.getValue().split(" "))).reduce((res, value) -> res += ", " + value);
-        outputFile.write(ByteBuffer.wrap((entry.getKey() + ", " + (values.orElse("")) + "\n").getBytes(StandardCharsets.UTF_8)));
+        outputFile.write(ByteBuffer.wrap((entry.getKey() + " -> " + (values.orElse("")) + "\n").getBytes(StandardCharsets.UTF_8)));
       } catch (IOException e) {
         System.err.println("Error writing in output file");
       }

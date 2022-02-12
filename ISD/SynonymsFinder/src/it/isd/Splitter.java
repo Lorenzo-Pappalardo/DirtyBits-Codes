@@ -24,7 +24,7 @@ public class Splitter {
 
   public Splitter(Path pathToOriginalFile, String delimiter, int maxRecordsPerFile) {
     this.pathToOriginalFile = pathToOriginalFile;
-    this.pathToOriginalFileDirectory = pathToOriginalFile.resolveSibling("").toAbsolutePath();
+    this.pathToOriginalFileDirectory = pathToOriginalFile.getParent().toAbsolutePath();
     this.delimiter = delimiter;
     this.maxRecordsPerFile = maxRecordsPerFile;
     this.partialsDirectory = Path.of(pathToOriginalFileDirectory + "\\Partials");
@@ -46,11 +46,15 @@ public class Splitter {
         System.exit(1);
       }
     }
-
+    Path tmpPath = null;
     final int dotIndex = pathToOriginalFile.getFileName().toString().lastIndexOf(".");
-    final String fileNameWithoutExtension = pathToOriginalFile.getFileName().toString().substring(0, dotIndex);
-    final String fileExtension = pathToOriginalFile.getFileName().toString().substring(dotIndex);
-    Path tmpPath = Path.of(partialsDirectory + "\\" + fileNameWithoutExtension + '_' + id + fileExtension);
+    if (dotIndex != -1) {
+      final String fileNameWithoutExtension = pathToOriginalFile.getFileName().toString().substring(0, dotIndex);
+      final String fileExtension = pathToOriginalFile.getFileName().toString().substring(dotIndex);
+      tmpPath = Path.of(partialsDirectory + "\\" + fileNameWithoutExtension + '_' + id + fileExtension);
+    } else {
+      tmpPath = Path.of(partialsDirectory + "\\" + pathToOriginalFile.getFileName() + '_' + id);
+    }
 
     try {
       Files.createFile(tmpPath);
@@ -74,7 +78,7 @@ public class Splitter {
 
       while (reader.ready()) {
         newFilesPath.add(createNewPartialFile(newFilesIndex + 1));
-        FileChannel outputFile = FileChannel.open(newFilesPath.get(newFilesIndex), StandardOpenOption.WRITE);
+        FileChannel outputFile = FileChannel.open(newFilesPath.get(newFilesIndex), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
         List<String> buffer = new ArrayList<>();
 
         int recordsRead = 0;

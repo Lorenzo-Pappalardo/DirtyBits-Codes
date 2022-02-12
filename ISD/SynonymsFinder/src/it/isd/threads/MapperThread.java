@@ -88,6 +88,7 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
       System.exit(1);
     }
 
+    System.out.println("Extracting pairs from: " + filePath);
     try {
       while (reader.ready()) {
         List<String> tmpRecord = new ArrayList<>();
