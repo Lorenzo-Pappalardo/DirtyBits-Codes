@@ -6,10 +6,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class OutputWriter {
   private FileChannel outputFile = null;
@@ -26,7 +23,7 @@ public class OutputWriter {
     for (Map<String, String> map : maps) {
       for (Map.Entry<String, String> entry : map.entrySet()) {
         try {
-          Optional<String> values = Arrays.stream((entry.getValue().split(" "))).reduce((res, value) -> res += ", " + value);
+          Optional<String> values = Arrays.stream((entry.getValue().split(" "))).reduce((res, value) -> res += " " + value);
           outputFile.write(ByteBuffer.wrap((entry.getKey() + ", " + (values.orElse("")) + "\n").getBytes(StandardCharsets.UTF_8)));
         } catch (IOException e) {
           System.err.println("Error writing in output file");
@@ -42,14 +39,16 @@ public class OutputWriter {
   }
 
   public void writeMapToFile(Map<String, String> map) {
-    for (Map.Entry<String, String> entry : map.entrySet()) {
+    List<Map.Entry<String, String>> ordered = map.entrySet().stream().sorted(Map.Entry.<String, String>comparingByValue().reversed()).toList();
+
+    ordered.forEach(entry -> {
       try {
         Optional<String> values = Arrays.stream((entry.getValue().split(" "))).reduce((res, value) -> res += ", " + value);
         outputFile.write(ByteBuffer.wrap((entry.getKey() + " -> " + (values.orElse("")) + "\n").getBytes(StandardCharsets.UTF_8)));
       } catch (IOException e) {
         System.err.println("Error writing in output file");
       }
-    }
+    });
 
     try {
       outputFile.close();
