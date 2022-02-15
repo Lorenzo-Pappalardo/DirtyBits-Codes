@@ -39,7 +39,7 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
       key = record[columnsToTake[0]];
 
       if (record.length > columnsToTake[1]) {
-        String tmp = record[columnsToTake[1]].toLowerCase();
+        String tmp = record[columnsToTake[1]];
 
         if (tmp.charAt(0) == '"') {
           tmp = tmp.substring(1);
@@ -50,7 +50,7 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
         tmp = tmp.replaceAll("[!().,;-]", "");
 
         String[] wordsArray = tmp.split(" ");
-        value = Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word)).collect(Collectors.joining(" "));
+        value = Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word.toLowerCase())).collect(Collectors.joining(" "));
       }
 
       if (value != null && !value.equals("")) {
