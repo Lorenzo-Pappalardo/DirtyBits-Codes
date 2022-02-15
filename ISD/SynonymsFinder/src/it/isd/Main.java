@@ -1,5 +1,6 @@
 package it.isd;
 
+import it.isd.test.SimilarityTest;
 import it.isd.threads.MapperThread;
 import it.isd.threads.SimilarityEvaluatorThread;
 
@@ -33,10 +34,12 @@ public class Main {
     return inputMap;
   }
 
-  private static void stopWordsReader(Path stopWordsPath, List<String> stopWords) {
+  private static List<String> readStopWords(Path stopWordsPath) {
+    List<String> toReturn = new ArrayList<>();
+
     try (LineNumberReader reader = new LineNumberReader(new FileReader(stopWordsPath.toString()))) {
       while (reader.ready()) {
-        stopWords.add(reader.readLine());
+        toReturn.add(reader.readLine());
       }
     } catch (FileNotFoundException e) {
       System.err.println("File not found");
@@ -44,37 +47,26 @@ public class Main {
     } catch (IOException e) {
       System.err.println("Error encountered while reading stop words: " + stopWordsPath);
     }
+
+    return toReturn;
   }
 
-  public static void main(String[] args) {
-    Map<String, String> inputMap = getInput(args);
+  private static List<Map<String, String>> getDictionaryMaps(List<Path> newFilesPaths, String dictionaryDelimiter, List<String> stopWords) {
+    final List<Future<Map<String, String>>> futures = new ArrayList<>();
 
-    Path baseFilePath = Path.of(inputMap.get(variablesNames[0]));
-    String baseDelimiter = inputMap.get(variablesNames[1]);
-    Path dictionaryFilepath = Path.of(inputMap.get(variablesNames[2]));
-    String dictionaryDelimiter = inputMap.get(variablesNames[3]);
-    Path stopWordsPath = Path.of(inputMap.get(variablesNames[4]));
-
-    System.out.println("Started");
-
-    // Preparation
-    Splitter splitter = new Splitter(dictionaryFilepath, dictionaryDelimiter, 1000);
-    List<Path> newFilesPaths = splitter.splitFile();
-
-    List<String> stopWords = new ArrayList<>();
-    stopWordsReader(stopWordsPath, stopWords);
-
-    Map<String, String> baseMap = new MapperThread("base_pairs", baseFilePath, baseDelimiter, new int[]{1, 5}, stopWords).call();
-
-    List<Future<Map<String, String>>> futures = new ArrayList<>();
-    ExecutorService executor = Executors.newCachedThreadPool();
-
+    final ExecutorService executor = Executors.newCachedThreadPool();
     for (Path filePath : newFilesPaths) {
       futures.add(executor.submit(new MapperThread("dictionary", filePath, dictionaryDelimiter, new int[]{0, 3}, stopWords)));
     }
 
-    List<Map<String, String>> dictionaryMaps = new ArrayList<>();
+    executor.shutdown();
+    try {
+      executor.awaitTermination(5, TimeUnit.MINUTES);
+    } catch (InterruptedException e) {
+      System.err.println("Timeout expired");
+    }
 
+    final List<Map<String, String>> dictionaryMaps = new ArrayList<>();
     futures.forEach(future -> {
       try {
         dictionaryMaps.add(future.get());
@@ -83,9 +75,13 @@ public class Main {
       }
     });
 
-    Map<String, String> jaccardMap = Collections.synchronizedMap(new HashMap<>());
+    return dictionaryMaps;
+  }
 
-    int threadID= 0;
+  private static void getJaccardMap(Map<String, String> baseMap, List<Map<String, String>> dictionaryMaps, Map<String, String> jaccardMap) {
+    final ExecutorService executor = Executors.newCachedThreadPool();
+
+    int threadID = 0;
     for (Map<String, String> map : dictionaryMaps) {
       executor.submit(new SimilarityEvaluatorThread("SE" + ++threadID, baseMap, map, jaccardMap));
     }
@@ -96,8 +92,37 @@ public class Main {
     } catch (InterruptedException e) {
       System.err.println("Timeout expired");
     }
+  }
 
-    OutputWriter outputWriter = new OutputWriter(Path.of(dictionaryFilepath.getParent() + "\\output.txt"));
-    outputWriter.writeMapToFile(jaccardMap);
+  public static void main(String[] args) {
+    final Map<String, String> inputMap = getInput(args);
+
+    final Path baseFilePath = Path.of(inputMap.get(variablesNames[0]));
+    final String baseDelimiter = inputMap.get(variablesNames[1]);
+    final Path dictionaryFilepath = Path.of(inputMap.get(variablesNames[2]));
+    final String dictionaryDelimiter = inputMap.get(variablesNames[3]);
+    final Path stopWordsPath = Path.of(inputMap.get(variablesNames[4]));
+
+    final Date startDate = new Date();
+    System.out.println("Started");
+
+    // Preparation
+    final List<Path> newFilesPaths = new Splitter(dictionaryFilepath, dictionaryDelimiter, 1000).splitFile();
+    final List<String> stopWords = readStopWords(stopWordsPath);
+    final Map<String, String> baseMap = new MapperThread("base_pairs", baseFilePath, baseDelimiter, new int[]{1, 5}, stopWords).call();
+    final List<Map<String, String>> dictionaryMaps = getDictionaryMaps(newFilesPaths, dictionaryDelimiter, stopWords);
+
+    // Results
+    final Map<String, String> jaccardMap = Collections.synchronizedMap(new HashMap<>());
+    getJaccardMap(baseMap, dictionaryMaps, jaccardMap);
+
+    // Writing results
+    new OutputWriter(Path.of(dictionaryFilepath.getParent() + "\\output.txt")).writeMapToFile(jaccardMap);
+
+    final Date endDate = new Date();
+    System.out.println("Finished in " + (endDate.getTime() - startDate.getTime()) + "ms");
+
+    // Tests
+    new SimilarityTest(stopWords).test();
   }
 }
