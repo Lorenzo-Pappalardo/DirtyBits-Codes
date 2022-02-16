@@ -37,7 +37,7 @@ public class SimilarityEvaluatorThread extends WorkerThread implements Callable<
 
     for (Map.Entry<String, String> baseEntry : base.entrySet()) {
       for (Map.Entry<String, String> dictionaryEntry : dictionary.entrySet()) {
-        String resultKey = '(' + baseEntry.getKey() + ", " + dictionaryEntry.getKey() + ')';
+        String resultKey = baseEntry.getKey() + ", " + dictionaryEntry.getKey();
         float resultValue = getJaccardIndex(baseEntry.getValue().split(" "), dictionaryEntry.getValue().split(" "));
 
         if (resultValue > 0) {

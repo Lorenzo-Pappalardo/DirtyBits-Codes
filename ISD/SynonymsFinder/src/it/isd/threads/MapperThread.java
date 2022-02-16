@@ -25,56 +25,62 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
     map = new HashMap<>();
   }
 
+  private String removeStopWords(String original) {
+    String[] wordsArray = original.split(" ");
+    return Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word.toLowerCase())).collect(Collectors.joining(" "));
+  }
+
+  private void extractFromCSV(List<String> recordLines) {
+    String key;
+    String value = null;
+
+    String[] record = recordLines.get(0).split(delimiter);
+    key = record[columnsToTake[0]];
+
+    if (record.length > columnsToTake[1]) {
+      String tmp = record[columnsToTake[1]];
+
+      tmp = tmp.replaceAll("[^\\w\\s]", "");
+
+      value = removeStopWords(tmp);
+    }
+
+    if (value != null && value.length() > 0) {
+      map.put(key, value);
+    }
+  }
+
+  private void extractFromLEXICON(List<String> recordLines) {
+    String key = null;
+    String value;
+
+    for (String line : recordLines) {
+      if (line.contains("base")) {
+        key = line.substring(6);
+      } else if (line.contains("acronym") || line.contains("abbreviation")) {
+        int startIndex = line.indexOf('=') + 1;
+
+        value = line.substring(startIndex).replaceAll("\\|.*", "");
+
+        value = removeStopWords(value);
+
+        if (value != null && value.length() > 0) {
+          map.put(key, value);
+        }
+      }
+    }
+  }
+
   /**
    * Extracts key-value pairs from a record in a file and adds them to a map
    *
    * @param recordLines List of strings representing a record in the original file
    */
   private void extractKeyValue(List<String> recordLines) {
-    String key = null;
-    String value = null;
-
     if (recordLines.size() == 1) {
-      String[] record = recordLines.get(0).split(delimiter);
-      key = record[columnsToTake[0]];
-
-      if (record.length > columnsToTake[1]) {
-        String tmp = record[columnsToTake[1]];
-
-        if (tmp.charAt(0) == '"') {
-          tmp = tmp.substring(1);
-        } else if (tmp.charAt(tmp.length() - 1) == '"') {
-          tmp = tmp.substring(0, tmp.length() - 1);
-        }
-
-        tmp = tmp.replaceAll("[!().,;-]", "");
-
-        String[] wordsArray = tmp.split(" ");
-        value = Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word.toLowerCase())).collect(Collectors.joining(" "));
-      }
-
-      if (value != null && !value.equals("")) {
-        map.put(key, value);
-      }
+      extractFromCSV(recordLines);
     } else {
-      for (String line : recordLines) {
-        if (line.contains("base")) {
-          key = line.substring(6);
-        } else if (line.contains("acronym") || line.contains("abbreviation")) {
-          int startIndex = line.indexOf('=') + 1;
-          value = "";
-
-          for (int i = startIndex; i < line.length(); i++) {
-            if (line.charAt(i) != '|') {
-              value += line.charAt(i);
-            } else {
-              break;
-            }
-          }
-
-          map.put(key, value);
-        }
-      }
+      extractFromLEXICON(recordLines);
     }
   }
 
