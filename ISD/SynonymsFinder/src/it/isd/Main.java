@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class Main {
-  static String[] variablesNames = {"baseFilePath", "baseDelimiter", "dictionaryFilepath", "dictionaryDelimiter", "stopWordsPath"};
+  static String[] variablesNames = {"baseFilePath", "baseDelimiter", "baseColumns", "dictionaryFilepath", "dictionaryDelimiter", "dictionaryColumns", "stopWordsPath"};
 
   public static Map<String, String> getInput(String[] args) {
     Map<String, String> inputMap = new HashMap<>();
@@ -51,12 +51,12 @@ public class Main {
     return toReturn;
   }
 
-  private static List<Map<String, String>> getDictionaryMaps(List<Path> newFilesPaths, String dictionaryDelimiter, List<String> stopWords) {
+  private static List<Map<String, String>> getDictionaryMaps(List<Path> newFilesPaths, String dictionaryDelimiter, int[] dictionaryColumns, List<String> stopWords) {
     final List<Future<Map<String, String>>> futures = new ArrayList<>();
 
     final ExecutorService executor = Executors.newCachedThreadPool();
     for (Path filePath : newFilesPaths) {
-      futures.add(executor.submit(new MapperThread("dictionary", filePath, dictionaryDelimiter, new int[]{0, 3}, stopWords)));
+      futures.add(executor.submit(new MapperThread("dictionary", filePath, dictionaryDelimiter, dictionaryColumns, stopWords)));
     }
 
     executor.shutdown();
@@ -99,9 +99,11 @@ public class Main {
 
     final Path baseFilePath = Path.of(inputMap.get(variablesNames[0]));
     final String baseDelimiter = inputMap.get(variablesNames[1]);
-    final Path dictionaryFilepath = Path.of(inputMap.get(variablesNames[2]));
-    final String dictionaryDelimiter = inputMap.get(variablesNames[3]);
-    final Path stopWordsPath = Path.of(inputMap.get(variablesNames[4]));
+    final int[] baseColumns = Arrays.stream(inputMap.get(variablesNames[2]).split(",")).mapToInt(Integer::valueOf).toArray();
+    final Path dictionaryFilepath = Path.of(inputMap.get(variablesNames[3]));
+    final String dictionaryDelimiter = inputMap.get(variablesNames[4]);
+    final int[] dictionaryColumns = Arrays.stream(inputMap.get(variablesNames[5]).split(",")).mapToInt(Integer::valueOf).toArray();
+    final Path stopWordsPath = Path.of(inputMap.get(variablesNames[6]));
 
     final Date startDate = new Date();
     System.out.println("Started");
@@ -109,8 +111,8 @@ public class Main {
     // Preparation
     final List<Path> newFilesPaths = new Splitter(dictionaryFilepath, dictionaryDelimiter, 1000).splitFile();
     final List<String> stopWords = readStopWords(stopWordsPath);
-    final Map<String, String> baseMap = new MapperThread("base_pairs", baseFilePath, baseDelimiter, new int[]{1, 5}, stopWords).call();
-    final List<Map<String, String>> dictionaryMaps = getDictionaryMaps(newFilesPaths, dictionaryDelimiter, stopWords);
+    final Map<String, String> baseMap = new MapperThread("base_pairs", baseFilePath, baseDelimiter, baseColumns, stopWords).call();
+    final List<Map<String, String>> dictionaryMaps = getDictionaryMaps(newFilesPaths, dictionaryDelimiter, dictionaryColumns, stopWords);
 
     // Results
     final Map<String, String> jaccardMap = Collections.synchronizedMap(new HashMap<>());
