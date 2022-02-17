@@ -119,7 +119,7 @@ public class Main {
     getJaccardMap(baseMap, dictionaryMaps, jaccardMap);
 
     // Writing results
-    new OutputWriter(Path.of(dictionaryFilepath.getParent() + "\\output.txt")).writeMapToFile(jaccardMap);
+    new OutputWriter(Path.of(dictionaryFilepath.getParent() + "\\output\\output.csv")).writeMapToFile(jaccardMap);
 
     final Date endDate = new Date();
     System.out.println("Finished in " + (endDate.getTime() - startDate.getTime()) + "ms");

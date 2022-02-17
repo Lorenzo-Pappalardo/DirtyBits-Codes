@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
@@ -13,7 +14,11 @@ public class OutputWriter {
 
   OutputWriter(Path outputFilePath) {
     try {
-      this.outputFile = FileChannel.open(outputFilePath, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+      if (!Files.exists(outputFilePath.getParent())) {
+        Files.createDirectory(outputFilePath.getParent());
+      }
+
+      this.outputFile = FileChannel.open(outputFilePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
     } catch (IOException e) {
       System.err.println("Unable to open output file");
     }
