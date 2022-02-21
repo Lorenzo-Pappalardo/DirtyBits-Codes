@@ -1,5 +1,6 @@
 package it.isd.threads;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +20,15 @@ public class SimilarityEvaluatorThread extends WorkerThread implements Callable<
 
   private float getJaccardIndex(String[] s1, String[] s2) {
     List<String> l2 = Arrays.stream(s2).toList();
-    float commonWords = 0;
+    List<String> commonWords = new ArrayList<>();
 
     for (String s1Word : s1) {
-      if (l2.contains(s1Word)) {
-        commonWords++;
+      if (l2.contains(s1Word) && !commonWords.contains(s1Word)) {
+        commonWords.add(s1Word);
       }
     }
 
-    return (commonWords / (s1.length + s2.length - commonWords));
+    return ((float) commonWords.size() / (s1.length + s2.length - commonWords.size()));
   }
 
   @Override

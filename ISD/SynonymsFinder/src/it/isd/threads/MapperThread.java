@@ -30,15 +30,41 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
     return Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word.toLowerCase())).collect(Collectors.joining(" "));
   }
 
+  private List<String> processColumns(String[] split) {
+    List<String> columns = new ArrayList<>();
+
+    boolean columnContinues = false;
+    for (String column : split) {
+      if (columnContinues) {
+        int index = columns.size() - 1;
+        columns.set(index, columns.get(index) + column);
+
+        if (column.charAt(column.length() - 1) == '\"') {
+          columnContinues = false;
+        }
+      } else {
+        if (column.length() > 0 && column.charAt(0) == '\"') {
+          columnContinues = true;
+        }
+
+        columns.add(column);
+      }
+    }
+
+    return columns;
+  }
+
   private void extractFromCSV(List<String> recordLines) {
     String key;
     String value = null;
 
-    String[] record = recordLines.get(0).split(delimiter);
-    key = record[columnsToTake[0]];
+    String[] split = recordLines.get(0).split(delimiter);
+    List<String> columns = processColumns(split);
 
-    if (record.length > columnsToTake[1]) {
-      String tmp = record[columnsToTake[1]];
+    key = columns.get(columnsToTake[0]);
+
+    if (columns.size() > columnsToTake[1]) {
+      String tmp = columns.get(columnsToTake[1]);
 
       tmp = tmp.replaceAll("[^\\w\\s]", "");
 
