@@ -1,9 +1,10 @@
 package it.isd.threads;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 public class SimilarityEvaluatorThread extends WorkerThread implements Callable<Boolean> {
@@ -20,10 +21,10 @@ public class SimilarityEvaluatorThread extends WorkerThread implements Callable<
 
   private float getJaccardIndex(String[] s1, String[] s2) {
     List<String> l2 = Arrays.stream(s2).toList();
-    List<String> commonWords = new ArrayList<>();
+    Set<String> commonWords = new HashSet<>();
 
     for (String s1Word : s1) {
-      if (l2.contains(s1Word) && !commonWords.contains(s1Word)) {
+      if (l2.contains(s1Word)) {
         commonWords.add(s1Word);
       }
     }
