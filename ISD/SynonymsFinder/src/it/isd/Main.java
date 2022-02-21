@@ -4,10 +4,25 @@ import it.isd.test.SimilarityTest;
 import it.isd.threads.MapperThread;
 import it.isd.threads.SimilarityEvaluatorThread;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
   static String[] variablesNames = {"baseFilePath", "baseDelimiter", "baseColumns", "dictionaryFilepath", "dictionaryDelimiter", "dictionaryColumns", "stopWordsPath"};
@@ -114,6 +129,9 @@ public class Main {
     final Map<String, String> baseMap = new MapperThread("base_pairs", baseFilePath, baseDelimiter, baseColumns, stopWords).call();
     final List<Map<String, String>> dictionaryMaps = getDictionaryMaps(newFilesPaths, dictionaryDelimiter, dictionaryColumns, stopWords);
 
+    // Tests
+    new SimilarityTest(stopWords).test();
+
     // Results
     final Map<String, String> jaccardMap = Collections.synchronizedMap(new HashMap<>());
     getJaccardMap(baseMap, dictionaryMaps, jaccardMap);
@@ -123,8 +141,5 @@ public class Main {
 
     final Date endDate = new Date();
     System.out.println("Finished in " + (endDate.getTime() - startDate.getTime()) + "ms");
-
-    // Tests
-    new SimilarityTest(stopWords).test();
   }
 }
