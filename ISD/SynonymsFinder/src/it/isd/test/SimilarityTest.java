@@ -20,9 +20,16 @@ public class SimilarityTest {
     outputMap = new HashMap<>();
     this.stopWords = stopWords;
 
-    base.put("Parkinsonism", "A Parkinsonism that is characterized by postural instability, a broad-based gait with the absence of tremors of vascular origin.");
-    dictionary.put("muscular disease", "A neuromuscular disease that is characterized by an abnormal reduction in the muscle volume and atrophy.");
+    base.put("aplastic anemia", "An anemia that is characterized by a deficiency of red blood cells, white blood cells and platelets produced by bone marrow");
+    dictionary.put("Babesia canis", "Babesia canis is a parasite that infects red blood cells and can lead to anemia");
+    removePunctuation();
     removeStopsWords();
+  }
+
+  private void removePunctuation() {
+    base.entrySet().forEach(entry -> entry.setValue(entry.getValue().replaceAll("[^\\w\\s]", "")));
+
+    dictionary.entrySet().forEach(entry -> entry.setValue(entry.getValue().replaceAll("[^\\w\\s]", "")));
   }
 
   private void removeStopsWords() {
@@ -44,7 +51,7 @@ public class SimilarityTest {
     similarityEvaluatorThread.call();
 
     outputMap.forEach((key, value) -> {
-      if (value.equals(String.valueOf(1/17f))) {
+      if (value.equals(String.valueOf(4 / 18f))) {
         System.out.println("Passed");
       } else {
         System.out.println("Failed");
