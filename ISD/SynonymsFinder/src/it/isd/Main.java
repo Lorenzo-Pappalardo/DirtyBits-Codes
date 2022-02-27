@@ -27,6 +27,12 @@ import java.util.concurrent.TimeUnit;
 public class Main {
   static String[] variablesNames = {"baseFilePath", "baseDelimiter", "baseColumns", "dictionaryFilepath", "dictionaryDelimiter", "dictionaryColumns", "stopWordsPath"};
 
+  /**
+   * Reads inputs from standard input and organizes them in a Map
+   *
+   * @param args Program arguments
+   * @return {Map<String, String>} Map of inputs needed for correct program execution
+   */
   public static Map<String, String> getInput(String[] args) {
     Map<String, String> inputMap = new HashMap<>();
 
@@ -49,6 +55,12 @@ public class Main {
     return inputMap;
   }
 
+  /**
+   * Reads stop words file and return a List of stop words, used to filter out meaningless words
+   *
+   * @param stopWordsPath {Path} Path to the stop words file
+   * @return {List<String>} List of stop words
+   */
   private static List<String> readStopWords(Path stopWordsPath) {
     List<String> toReturn = new ArrayList<>();
 
@@ -66,6 +78,15 @@ public class Main {
     return toReturn;
   }
 
+  /**
+   * Extracts maps of each dictionary partials files and puts them all in a List
+   *
+   * @param newFilesPaths       {List<String>} List of all dictionary partials files
+   * @param dictionaryDelimiter {String} Symbol delimiting each dictionary record
+   * @param dictionaryColumns   {int[]} Array of exactly 2 int, the first representing the column containing the key and the second the value
+   * @param stopWords           {List<String>} List of stop words
+   * @return {List<Map<String, String>>} List of Map containing the records taken from each dictionary partial file
+   */
   private static List<Map<String, String>> getDictionaryMaps(List<Path> newFilesPaths, String dictionaryDelimiter, int[] dictionaryColumns, List<String> stopWords) {
     final List<Future<Map<String, String>>> futures = new ArrayList<>();
 
@@ -93,6 +114,13 @@ public class Main {
     return dictionaryMaps;
   }
 
+  /**
+   * Evaluates Jaccard index from entries taken from the base map and the dictionary maps, then saves the result in a map
+   *
+   * @param baseMap        {Map<String, String>} Map containing records taken from the base file
+   * @param dictionaryMaps {List<Map<String, String>>} List of Map containing the records taken from each dictionary partial file
+   * @param jaccardMap     {Map<String, String>} Output Map in which the results are saved
+   */
   private static void getJaccardMap(Map<String, String> baseMap, List<Map<String, String>> dictionaryMaps, Map<String, String> jaccardMap) {
     final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -139,7 +167,6 @@ public class Main {
     // Writing results
     new OutputWriter(Path.of(dictionaryFilepath.getParent() + "\\output\\output.csv")).writeMapToFile(jaccardMap);
 
-    final Date endDate = new Date();
-    System.out.println("Finished in " + (endDate.getTime() - startDate.getTime()) + "ms");
+    System.out.println("Finished in " + (new Date().getTime() - startDate.getTime()) + "ms");
   }
 }

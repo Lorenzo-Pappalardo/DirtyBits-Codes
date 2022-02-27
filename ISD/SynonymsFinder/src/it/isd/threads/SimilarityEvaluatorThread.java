@@ -19,6 +19,12 @@ public class SimilarityEvaluatorThread extends WorkerThread implements Callable<
     this.outputMap = outputMap;
   }
 
+  /**
+   * Calculates Jaccard index based on two descriptions
+   * @param s1 Array of words that make up the first description
+   * @param s2 Array of words that make up the second description
+   * @return {float} The calculated Jaccard Index
+   */
   private float getJaccardIndex(String[] s1, String[] s2) {
     List<String> l2 = Arrays.stream(s2).toList();
     Set<String> commonWords = new HashSet<>();

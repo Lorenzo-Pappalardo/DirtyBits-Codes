@@ -27,25 +27,11 @@ public class OutputWriter {
     }
   }
 
-  public void writeMapsToFile(List<Map<String, String>> maps) {
-    for (Map<String, String> map : maps) {
-      for (Map.Entry<String, String> entry : map.entrySet()) {
-        try {
-          Optional<String> values = Arrays.stream((entry.getValue().split(" "))).reduce((res, value) -> res += " " + value);
-          outputFile.write(ByteBuffer.wrap((entry.getKey() + ", " + (values.orElse("")) + "\n").getBytes(StandardCharsets.UTF_8)));
-        } catch (IOException e) {
-          System.err.println("Error writing in output file");
-        }
-      }
-    }
-
-    try {
-      outputFile.close();
-    } catch (IOException e) {
-      System.err.println("Error closing the output file");
-    }
-  }
-
+  /**
+   * Writes a Map to an output file
+   *
+   * @param map {Map} Map to be written
+   */
   public void writeMapToFile(Map<String, String> map) {
     List<Map.Entry<String, String>> ordered = map.entrySet().stream().sorted(Map.Entry.<String, String>comparingByValue().reversed()).toList();
 
@@ -62,14 +48,6 @@ public class OutputWriter {
       outputFile.close();
     } catch (IOException e) {
       System.err.println("Error closing the output file");
-    }
-  }
-
-  public void writeKeyValuePairToFile(String key, String value) {
-    try {
-      outputFile.write(ByteBuffer.wrap((key + " -> " + value + "\n").getBytes(StandardCharsets.UTF_8)));
-    } catch (IOException e) {
-      System.err.println("Error writing in output file");
     }
   }
 }

@@ -29,11 +29,23 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
     map = new HashMap<>();
   }
 
+  /**
+   * Removes stop words from a string
+   *
+   * @param original {String} The original string
+   * @return {String} The new string without stop words
+   */
   private String removeStopWords(String original) {
     String[] wordsArray = original.split(" ");
     return Arrays.stream(wordsArray).filter(word -> !stopWords.contains(word.toLowerCase())).collect(Collectors.joining(" "));
   }
 
+  /**
+   * Joins some strings that were originally part of the same column
+   *
+   * @param split {String[]} All strings obtained by calling split on the record
+   * @return {List<String>} List of all columns that form a record
+   */
   private List<String> processColumns(String[] split) {
     List<String> columns = new ArrayList<>();
 
@@ -58,11 +70,16 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
     return columns;
   }
 
-  private void extractFromCSV(List<String> recordLines) {
+  /**
+   * Gets keys and values from a record
+   *
+   * @param record {String} Line representing a record
+   */
+  private void extractFromCSV(String record) {
     String key;
     String value = null;
 
-    String[] split = recordLines.get(0).split(delimiter);
+    String[] split = record.split(delimiter);
     List<String> columns = processColumns(split);
 
     key = columns.get(columnsToTake[0]);
@@ -80,6 +97,11 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
     }
   }
 
+  /**
+   * Gets keys and values from a record
+   *
+   * @param recordLines {List<String>} List of strings forming a record
+   */
   private void extractFromLEXICON(List<String> recordLines) {
     String key = null;
     String value;
@@ -108,7 +130,7 @@ public class MapperThread extends WorkerThread implements Callable<Map<String, S
    */
   private void extractKeyValue(List<String> recordLines) {
     if (recordLines.size() == 1) {
-      extractFromCSV(recordLines);
+      extractFromCSV(recordLines.get(0));
     } else {
       extractFromLEXICON(recordLines);
     }
