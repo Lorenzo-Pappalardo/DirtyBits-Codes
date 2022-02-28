@@ -4,11 +4,9 @@ import it.isd.test.SimilarityTest;
 import it.isd.threads.MapperThread;
 import it.isd.threads.SimilarityEvaluatorThread;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -18,6 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,17 +40,19 @@ public class Main {
       inputMap.put(variablesNames[i], args[i]);
     }
 
+    Scanner input = new Scanner(System.in);
     for (String variablesName : variablesNames) {
       if (!inputMap.containsKey(variablesName)) {
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(System.in))) {
+        try {
           System.out.println("Insert " + variablesName + ':');
-          inputMap.put(variablesName, input.readLine());
-        } catch (IOException e) {
+          inputMap.put(variablesName, input.nextLine());
+        } catch (NoSuchElementException e) {
           System.err.println("Input error");
           System.exit(1);
         }
       }
     }
+    input.close();
 
     return inputMap;
   }
