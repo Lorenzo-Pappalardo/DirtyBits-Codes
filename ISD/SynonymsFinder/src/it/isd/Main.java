@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -40,12 +42,26 @@ public class Main {
       inputMap.put(variablesNames[i], args[i]);
     }
 
+    final String propertiesFilepath = Paths.get(".").toAbsolutePath().normalize() + "\\src\\it\\isd\\resources\\launchArguments.properties";
+    try (FileReader propertiesFile = new FileReader(propertiesFilepath)) {
+      Properties properties = new Properties();
+      properties.load(propertiesFile);
+
+      for (String variableName : variablesNames) {
+        final String value = properties.getProperty(variableName);
+        if (value != null && !value.equals("")) {
+          inputMap.put(variableName, value);
+        }
+      }
+    } catch (IOException ignored) {
+    }
+
     Scanner input = new Scanner(System.in);
-    for (String variablesName : variablesNames) {
-      if (!inputMap.containsKey(variablesName)) {
+    for (String variableName : variablesNames) {
+      if (!inputMap.containsKey(variableName)) {
         try {
-          System.out.println("Insert " + variablesName + ':');
-          inputMap.put(variablesName, input.nextLine());
+          System.out.println("Insert " + variableName + ':');
+          inputMap.put(variableName, input.nextLine());
         } catch (NoSuchElementException e) {
           System.err.println("Input error");
           System.exit(1);
