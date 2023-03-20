@@ -82,13 +82,16 @@ public class RSA {
     BigInteger d = e.modInverse(phi);
     Logger.printInfo("d: " + d);
 
-    BigInteger message = new BigInteger(random.nextInt(100), random);
+    // BigInteger message = new BigInteger(random.nextInt(100), random);
+    String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
     Logger.printInfo("message: " + message);
 
-    BigInteger encrypted = message.modPow(e, n);
+    // BigInteger encrypted = message.modPow(e, n);
+    BigInteger encrypted = new BigInteger(message.getBytes()).modPow(e, n);
     Logger.printInfo("encrypted: " + encrypted);
 
-    BigInteger decrypted = encrypted.modPow(d, n);
-    Logger.printInfo("decrypted: " + decrypted.toString());
+    // BigInteger decrypted = encrypted.modPow(d, n);
+    String decrypted = new String(encrypted.modPow(d, n).toByteArray());
+    Logger.printInfo("decrypted: " + decrypted);
   }
 }
